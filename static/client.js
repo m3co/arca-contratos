@@ -7,7 +7,7 @@
     client.emit('data', {
       query: 'select',
       module: 'APU',
-      project: '2'
+      parent: '2'
     });
 
   });
