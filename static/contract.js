@@ -40,7 +40,10 @@
     if (!parent) {
       unsorted.push(row);
     } else {
-      parent[Children].push(row);
+      var found = parent[Children].find(d => d.id === row.id);
+      if (!found) {
+        parent[Children].push(row);
+      }
     }
 
     if (lastSTO) {
