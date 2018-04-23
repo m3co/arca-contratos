@@ -57,15 +57,22 @@
       return;
     }
     var tr = base.selectAll('li')
-      .data(tree[Children])
+      .data(tree[Children].filter(d => d.expand))
       .enter().append('li');
 
     tr.append('label').attr('for', d => d.id).text(d => d.id);
     tr.append('input').attr('type', 'checkbox').attr('for', d => d.id);
     tr.append('ol').attr('root', d => d.id);
 
+    base.selectAll('li.file').data(tree[Children].filter(d => !d.expand))
+      .enter().append('li').attr('class', 'file').append('a')
+        .attr('href', '#').text(d => d.id)
+
     for (var i = 0; i < tree[Children].length; i++) {
-      render(d3.select(`ol[root="${tree[Children][i].id}"]`), tree[Children][i]);
+      if (tree[Children][i].expand) {
+        render(d3.select(`ol[root="${tree[Children][i].id}"]`),
+          tree[Children][i]);
+      }
     }
   }
 
