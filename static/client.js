@@ -6,7 +6,7 @@
 
     client.emit('data', {
       query: 'select',
-      module: 'APU',
+      module: 'fnContractsAPU',
       parent: '2'
     });
 
