@@ -95,6 +95,9 @@
     base.selectAll('li.file').data(tree[Children].filter(d => !d.expand))
       .enter().append('li').attr('class', 'file').append('a')
         .attr('href', '#').text(d => d.id)
+        .style('color', d =>
+          d.status == 'empty' ? 'gray' : (d.status == 'full' ? 'black' : blue)
+        );
 
     for (var i = 0; i < tree[Children].length; i++) {
       if (tree[Children][i].expand) {
