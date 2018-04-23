@@ -4,7 +4,8 @@
   var Children = Symbol();
   var Ready = Symbol();
   var root = {
-    id: '2', parent: null, expand: true, total: null, partial: null
+    id: '2', parent: null, description: '',
+    expand: true, total: null, partial: null
   };
   root[Children] = [];
 
@@ -54,10 +55,6 @@
       clearTimeout(lastSTO);
     }
     lastSTO = setTimeout(() => {
-      if (skipOnce) {
-        skipOnce = false;
-        return;
-      }
       render(d3.select('ol.tree'), tree);
     }, 300);
   }
@@ -72,7 +69,10 @@
 
     tr.append('label')
       .attr('for', d => d.id)
-      .text(d => d.id);
+      .text(d => `${d.id} ${d.description}`)
+      .on('click', (d) => {
+        console.log(d);
+      });
     tr.append('input')
       .attr('type', 'checkbox')
       .attr('for', d => d.id)
@@ -94,10 +94,13 @@
 
     base.selectAll('li.file').data(tree[Children].filter(d => !d.expand))
       .enter().append('li').attr('class', 'file').append('a')
-        .attr('href', '#').text(d => d.id)
+        .attr('href', '#').text(d => `${d.id} ${d.description}`)
         .style('color', d =>
           d.status == 'empty' ? 'gray' : (d.status == 'full' ? 'black' : blue)
-        );
+        )
+        .on('click', (d) => {
+          console.log(d);
+        });
 
     for (var i = 0; i < tree[Children].length; i++) {
       if (tree[Children][i].expand) {
