@@ -3,7 +3,7 @@
 
   var Children = Symbol();
   var root = {
-    id: '2', expand: true
+    id: '2', parent: null, expand: true, total: null, partial: null
   };
   root[Children] = [];
 
@@ -14,7 +14,7 @@
   window.tree = tree;
   window.unsorted = unsorted;
 
-  var lastSTO;
+  var lastSTO, skipOnce = true;
 
   function doselect(row) {
     if (row.expand) {
@@ -47,7 +47,10 @@
       clearTimeout(lastSTO);
     }
     lastSTO = setTimeout(() => {
-      if (lastSTO < 100) return;
+      if (skipOnce) {
+        skipOnce = false;
+        return;
+      }
       render(d3.select('ol.tree'), tree);
     }, 300);
   }
