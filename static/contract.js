@@ -2,6 +2,7 @@
 (() => {
 
   var Children = Symbol();
+  var Ready = Symbol();
   var root = {
     id: '2', parent: null, expand: true, total: null, partial: null
   };
@@ -9,6 +10,7 @@
 
   var tree = {};
   tree[Children] = [root];
+  tree[Ready] = false;
   var unsorted = [];
 
   window.tree = tree;
@@ -19,6 +21,7 @@
   function doselect(row) {
     if (row.expand) {
       row[Children] = [];
+      row[Ready] = false;
     }
 
     function search(id, tree) {
@@ -43,6 +46,7 @@
       var found = parent[Children].find(d => d.id === row.id);
       if (!found) {
         parent[Children].push(row);
+        parent[Ready] = true;
       }
     }
 
@@ -73,11 +77,13 @@
       .attr('type', 'checkbox')
       .attr('for', d => d.id)
       .on('change', function(d, i, m) {
-        client.emit('data', {
-          query: 'select',
-          module: 'fnContractsAPU',
-          parent: d.id
-        });
+        if (!(d[Ready])) {
+          client.emit('data', {
+            query: 'select',
+            module: 'fnContractsAPU',
+            parent: d.id
+          });
+        }
       })
       .each(function(d) {
         if (d.parent === null) {
