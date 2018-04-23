@@ -14,6 +14,8 @@
   window.tree = tree;
   window.unsorted = unsorted;
 
+  var lastSTO;
+
   function doselect(row) {
     if (row.expand) {
       row[Children] = [];
@@ -40,6 +42,19 @@
     } else {
       parent[Children].push(row);
     }
+
+    if (lastSTO) {
+      clearTimeout(lastSTO);
+    }
+    lastSTO = setTimeout(() => {
+      if (lastSTO < 100) return;
+      render();
+    }, 300);
+  }
+
+
+  function render() {
+    console.log(tree);
   }
 
   window.doselect = doselect;
