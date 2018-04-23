@@ -52,9 +52,15 @@
     }, 300);
   }
 
-
   function render() {
-    console.log(tree);
+    var tr = d3.select('ol.tree')
+      .selectAll('li')
+      .data(tree[Children])
+      .enter().append('li');
+
+    tr.append('label').attr('for', d => d.id).text(d => d.id);
+    tr.append('input').attr('type', 'checkbox').attr('for', d => d.id);
+    tr.append('ol');
   }
 
   window.doselect = doselect;
