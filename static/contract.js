@@ -48,19 +48,25 @@
     }
     lastSTO = setTimeout(() => {
       if (lastSTO < 100) return;
-      render();
+      render(d3.select('ol.tree'), tree);
     }, 300);
   }
 
-  function render() {
-    var tr = d3.select('ol.tree')
-      .selectAll('li')
+  function render(base, tree) {
+    if (!(tree[Children] instanceof Array)) {
+      return;
+    }
+    var tr = base.selectAll('li')
       .data(tree[Children])
       .enter().append('li');
 
     tr.append('label').attr('for', d => d.id).text(d => d.id);
     tr.append('input').attr('type', 'checkbox').attr('for', d => d.id);
-    tr.append('ol');
+    tr.append('ol').attr('root', d => d.id);
+
+    for (var i = 0; i < tree[Children].length; i++) {
+      render(d3.select(`ol[root="${tree[Children][i].id}"]`), tree[Children][i]);
+    }
   }
 
   window.doselect = doselect;
