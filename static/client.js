@@ -15,7 +15,7 @@
   client.on('response', (data) => {
     var query = data.query;
     if (data.row) {
-      console.log(data.row);
+      doselect(data.row);
     }
   });
   window.client = client;
