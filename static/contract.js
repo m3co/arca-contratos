@@ -63,8 +63,24 @@
       .data(tree[Children].filter(d => d.expand))
       .enter().append('li');
 
-    tr.append('label').attr('for', d => d.id).text(d => d.id);
-    tr.append('input').attr('type', 'checkbox').attr('for', d => d.id);
+    tr.append('label')
+      .attr('for', d => d.id)
+      .text(d => d.id);
+    tr.append('input')
+      .attr('type', 'checkbox')
+      .attr('for', d => d.id)
+      .on('change', function(d, i, m) {
+        client.emit('data', {
+          query: 'select',
+          module: 'fnContractsAPU',
+          parent: d.id
+        });
+      })
+      .each(function(d) {
+        if (d.parent === null) {
+          d3.select(this).attr('checked', '');
+        }
+      });
     tr.append('ol').attr('root', d => d.id);
 
     base.selectAll('li.file').data(tree[Children].filter(d => !d.expand))
