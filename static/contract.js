@@ -71,13 +71,7 @@
     tr.append('label')
       .attr('for', d => d.id)
       .text(d => `${d.id} ${d.description}`)
-      .on('click', (d) => {
-        client.emit('data', {
-          query: 'select',
-          module: 'viewContractsAPU',
-          parent: d.id
-        });
-      });
+      .on('click', content.request);
     tr.append('input')
       .attr('type', 'checkbox')
       .attr('for', d => d.id)
@@ -103,13 +97,7 @@
         .style('color', d =>
           d.status == 'empty' ? 'gray' : (d.status == 'full' ? 'black' : blue)
         )
-        .on('click', (d) => {
-          client.emit('data', {
-            query: 'select',
-            module: 'viewContractsAPU',
-            parent: d.id
-          });
-        });
+        .on('click', content.request);
 
     for (var i = 0; i < tree[Children].length; i++) {
       if (tree[Children][i].expand) {
