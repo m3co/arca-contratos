@@ -30,7 +30,28 @@
   }
 
   function render() {
-    console.log('rendering', contents);
+    var ct = d3.select('div.blocks').selectAll('table').data(contents);
+    var tb = ct.enter().append('table');
+    var th = tb.append('thead');
+    var tr = th.append('tr');
+    tr.append('td').text(d => d.id);
+    tr.append('td').text(d => d.APU_description).attr('colspan', 2);
+    tr.append('td').text(d => `$${d.cost}/${d.APU_unit}`);
+
+    tr = th.append('tr');
+    tr.append('th').text('Lugar');
+    tr.append('th').text('Insumo');
+    tr.append('th').text('Cantidad');
+    tr.append('th').text('Contrato');
+
+    var ty = tb.append('tbody').selectAll('tr').data(d => d.contents).enter();
+    tr = ty.append('tr');
+    tr.append('td').text(d => d.constrain);
+    tr.append('td').text(d => d.Supplies_description);
+    tr.append('td').text(d =>
+      `${d.ContractsAPUSupplies_qop ?
+        d.ContractsAPUSupplies_qop : 0} / ${d.Qtakeoff_qop}`);
+    tr.append('td').text(d => d.title);
   }
 
   window.content = {
