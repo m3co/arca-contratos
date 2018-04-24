@@ -8,6 +8,7 @@
     expand: true, total: null, partial: null
   };
   root[Children] = [];
+  root[Ready] = false;
 
   var tree = {};
   tree[Children] = [root];
@@ -71,7 +72,11 @@
       .attr('for', d => d.id)
       .text(d => `${d.id} ${d.description}`)
       .on('click', (d) => {
-        console.log(d);
+        client.emit('data', {
+          query: 'select',
+          module: 'viewContractsAPU',
+          parent: d.id
+        });
       });
     tr.append('input')
       .attr('type', 'checkbox')
@@ -99,7 +104,11 @@
           d.status == 'empty' ? 'gray' : (d.status == 'full' ? 'black' : blue)
         )
         .on('click', (d) => {
-          console.log(d);
+          client.emit('data', {
+            query: 'select',
+            module: 'viewContractsAPU',
+            parent: d.id
+          });
         });
 
     for (var i = 0; i < tree[Children].length; i++) {

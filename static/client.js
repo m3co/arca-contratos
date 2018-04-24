@@ -15,7 +15,11 @@
   client.on('response', (data) => {
     var query = data.query;
     if (data.row) {
-      doselect(data.row);
+      if (data.module == 'fnContractsAPU') {
+        doselect(data.row);
+      } else {
+        console.log('sin procesar', data.row);
+      }
     }
   });
   window.client = client;
