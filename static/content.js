@@ -56,7 +56,10 @@
 
   window.content = {
     doselect: doselect,
-    request: (d) => {
+    request: function request(d) {
+      [...document.querySelectorAll('ol.tree li.active')]
+        .forEach(d => d.classList.remove('active'));
+      this.closest('li').classList.add('active');
       contents.length = 0;
       d3.select('div.blocks').html('');
       client.emit('data', {
