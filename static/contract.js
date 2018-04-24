@@ -119,5 +119,7 @@
     }
   }
 
-  window.doselect = doselect;
+  window.contract = {
+    doselect: doselect
+  };
 })();

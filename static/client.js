@@ -16,7 +16,9 @@
     var query = data.query;
     if (data.row) {
       if (data.module == 'fnContractsAPU') {
-        doselect(data.row);
+        contract.doselect(data.row);
+      } else if (data.module == 'viewContractsAPU') {
+        content.doselect(data.row);
       } else {
         console.log('sin procesar', data.row);
       }
