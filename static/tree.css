@@ -65,7 +65,7 @@ li input + ol > li { display: none; margin-left: -14px !important; padding-left:
 li label
 {
   background: url(folder-horizontal.png) 15px 1px no-repeat;
-  background-size: contain;
+  background-size: 10px;
   cursor: pointer;
   display: block;
   padding-left: 37px;
