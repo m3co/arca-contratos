@@ -10,6 +10,10 @@
       parent: '2'
     });
 
+    client.emit('data', {
+      query: 'select',
+      module: 'Contracts'
+    });
   });
 
   client.on('response', (data) => {
@@ -19,6 +23,8 @@
         contract.doselect(data.row);
       } else if (data.module == 'viewContractsAPU') {
         content.doselect(data.row);
+      } else if (data.module == 'Contracts') {
+        contractList.doselect(data.row);
       } else {
         console.log('sin procesar', data.row);
       }
