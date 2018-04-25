@@ -30,6 +30,10 @@
       .selectAll('tr').data(contracts).enter()
       .append('tr')
         .append('td').text(d => d.title);
+
+    d3.select('#select-contract')
+      .selectAll('option').data(contracts).enter()
+      .append('option').text(d => d.title).attr('value', d => d.id);
   }
 
   window.contractList = {
