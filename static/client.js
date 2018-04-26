@@ -11,6 +11,11 @@
     });
 
     client.emit('data', {
+      query: 'subscribe',
+      module: 'Contracts'
+    });
+
+    client.emit('data', {
       query: 'select',
       module: 'Contracts'
     });

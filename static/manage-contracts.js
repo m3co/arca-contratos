@@ -8,6 +8,27 @@
     document.querySelector('#manage-contracts-space').style.display = 'none';
   });
 
+  document.querySelector('#add-contract').addEventListener('click', e => {
+    if (document.querySelector('table#manage-contracts-table tbody input'))
+      return;
+    d3.select('table#manage-contracts-table tbody')
+      .append('tr')
+      .append('td').append('form')
+        .on('submit', () => {
+          d3.event.preventDefault();
+          var title = d3.event.target.querySelector('input').value;
+          client.emit('data', {
+            query: 'insert',
+            module: 'Contracts',
+            row: {
+              title: title
+            }
+          });
+          d3.event.target.closest('tr').remove();
+        })
+        .append('input');
+  });
+
   var contracts = [];
   var lastSTO;
 
