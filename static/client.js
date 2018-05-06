@@ -19,9 +19,13 @@
     var query = data.query;
     if (data.row) {
       if (data.module == 'Contracts') {
-        contracts.doselect(data.row);
+        if (data.query == 'select') {
+          contracts.doselect(data.row);
+        } else {
+          console.log('sin procesar Contracts', data);
+        }
       } else {
-        console.log('sin procesar', data.row);
+        console.log('sin procesar', data);
       }
     }
   });
