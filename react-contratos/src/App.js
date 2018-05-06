@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import Client from './Client.js';
 import './App.css';
 
+let arca = new Client();
+
 class Row extends Component {
   render() {
     return (
       <tr>
-        <td>{this.props.entry.a}</td>
-        <td>{this.props.entry.b}</td>
-        <td>{this.props.entry.c}</td>
+        <td>{this.props.entry.title}</td>
+        <td>{this.props.entry.status}</td>
       </tr>
     );
   }
@@ -17,27 +18,35 @@ class Row extends Component {
 class App extends Component {
   constructor(props) {
     super(props);
-    this.client = new Client();
+
+    arca.connection.on('connect', () => {
+      arca.connection.emit('data', {
+        query: 'subscribe',
+        module: 'Contracts'
+      });
+
+      arca.connection.emit('data', {
+        query: 'select',
+        module: 'Contracts'
+      });
+    });
+
+    arca.connection.on('response', (data) => {
+      if (data.query === 'select') {
+        this.setState({
+          rows: this.state.rows.slice().concat(data.row)
+        });
+      }
+    });
+
     this.state = {
-      rows: [{
-        a: 1,
-        b: 2,
-        c: 3
-      }, {
-        a: 4,
-        b: 5,
-        c: 6
-      }, {
-        a: 7,
-        b: 8,
-        c: 9
-      }]
+      rows: []
     };
   }
 
   render() {
     let rows = this.state.rows.map(row =>
-      <Row entry={row}/>
+      <Row entry={row} key={row.id.toString()} />
     );
     return (
       <div className="App">
