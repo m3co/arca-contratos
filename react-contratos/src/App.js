@@ -4,12 +4,28 @@ import './App.css';
 
 let arca = new Client();
 
+class Cell extends Component {
+  handleClickSpan() {
+    console.log(this);
+    console.log('toggle the span with the input for redacting...');
+  }
+
+  render() {
+    return (
+      <div>
+        <span onClick={this.handleClickSpan}>{this.props.entry[this.props.name]}</span>
+      </div>
+    );
+  }
+}
+
+
 class Row extends Component {
   render() {
     return (
       <tr>
-        <td>{this.props.entry.title}</td>
-        <td>{this.props.entry.status}</td>
+        <td><Cell entry={this.props.entry} name={'status'} /></td>
+        <td><Cell entry={this.props.entry} name={'title'} /></td>
       </tr>
     );
   }
