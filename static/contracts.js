@@ -34,6 +34,7 @@
     return function redact(selection) {
       selection.append('span')
         .text(d => d[key])
+        .attr('column', key)
         .on('click', d => {
           var e = d3.event;
           e.preventDefault();
@@ -65,6 +66,7 @@
 
       form.append('input')
         .attr('name', 'value')
+        .attr('column', key)
         .attr('value', d => d[key]);
 
       form.append('input')
@@ -86,12 +88,20 @@
 
   function render() {
     var tb = d3.select('table#contracts').selectAll('tr.contract').data(contracts);
+
+    tb.selectAll('span')
+      .text((d, i, m) => d[m[i].getAttribute('column')]);
+    tb.selectAll('input[name="value"]')
+      .attr('value', (d, i, m) => d[m[i].getAttribute('column')]);
+
+    tb.exit().remove();
     var tr = tb.enter().append('tr').classed('contract', true);
     tr.append('td').call(setupRedact('id', 'title'));
     tr.append('td').call(setupRedact('id', 'status'));
   }
 
   window.contracts = {
-    doselect: doselect
+    doselect: doselect,
+    doupdate: doupdate
   };
 })();

@@ -21,6 +21,8 @@
       if (data.module == 'Contracts') {
         if (data.query == 'select') {
           contracts.doselect(data.row);
+        } else if (data.query == 'update') {
+          contracts.doupdate(data.row);
         } else {
           console.log('sin procesar Contracts', data);
         }
