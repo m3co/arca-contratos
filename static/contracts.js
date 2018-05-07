@@ -31,7 +31,7 @@
   }
 
   function dodelete(row) {
-    var foundIndex = contracts.find(d => d.id == row.id);
+    var foundIndex = contracts.findIndex(d => d.id == row.id);
     if (foundIndex > -1) {
       contracts.splice(foundIndex, 1);
       bounceRender();
