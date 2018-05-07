@@ -3,7 +3,7 @@
 function setupRedact(id, key, module, query = 'update') {
   return function redact(selection) {
     selection.append('span')
-      .text(d => d[key])
+      .text(d => d[key] ? (d[key].toString().trim() ? d[key] : '-') : '-')
       .attr('key', key)
       .on('click', d => {
         var e = d3.event;
@@ -17,7 +17,7 @@ function setupRedact(id, key, module, query = 'update') {
 
     var form = selection.append('form')
       .attr('hidden', '')
-      .on('submit', d => {
+      .on('submit', row => {
         var e = d3.event;
         e.preventDefault();
 
@@ -27,11 +27,21 @@ function setupRedact(id, key, module, query = 'update') {
         span.hidden = false;
 
         var fd = new FormData(form).toJSON();
-        fd.key = [fd.key];
-        fd.value = [fd.value];
-        fd.query = query;
-        fd.module = module;
-        client.emit('data', fd);
+        if (query == 'update') {
+          client.emit('data', {
+            key: [fd.key],
+            value: [fd.value],
+            query: query,
+            module: module
+          });
+        } else {
+          row[fd.key] = fd.value;
+          client.emit('data', {
+            row: row,
+            query: query,
+            module: module
+          });
+        }
       });
 
     form.append('input')

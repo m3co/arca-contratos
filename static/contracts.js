@@ -30,9 +30,24 @@
     }
   }
 
-  function render() {
-    var tb = d3.select('table#contracts').selectAll('tr.contract').data(contracts);
+  function dodelete(row) {
+    var foundIndex = contracts.find(d => d.id == row.id);
+    if (foundIndex > -1) {
+      contracts.splice(foundIndex, 1);
+      bounceRender();
+    }
+  }
 
+  var defaultRow = {
+    status: 'negotiations'
+  };
+
+  function render() {
+    var tb;
+    var tr;
+
+    tb = d3.select('table#contracts').selectAll('tr.contract').data(contracts);
+    // UPDATE
     tb.selectAll('span')
       .text((d, i, m) => d[m[i].getAttribute('key')]);
     tb.selectAll('input[name="value"]')
@@ -40,14 +55,42 @@
     tb.selectAll('input[name="id"]')
       .attr('value', (d, i, m) => d[m[i].getAttribute('idkey')]);
 
-    tb.exit().remove();
-    var tr = tb.enter().append('tr').classed('contract', true);
+    // ENTER
+    tr = tb.enter().append('tr').classed('contract', true);
     tr.append('td').call(setupRedact('id', 'title', 'Contracts'));
     tr.append('td').call(setupRedact('id', 'status', 'Contracts'));
+    tr.append('td').append('button')
+      .text('-')
+      .on('click', d => {
+        client.emit('data', {
+          query: 'delete',
+          module: 'Contracts',
+          id: d.id,
+          idkey: 'id'
+        });
+      });
+
+    // EXIT
+    tb.exit().remove();
+
+    // NEW-ENTRY
+    tb = d3.select('table#contracts')
+      .selectAll('tr.new-contract')
+      .data([Object.assign({}, defaultRow)]);
+
+    tr = tb.enter().append('tr').classed('new-contract', true);
+    tr.append('td').call(setupRedact('id', 'title', 'Contracts', 'insert'));
+    tr.append('td').call(setupRedact('id', 'status', 'Contracts', 'insert'));
+
+    // MOVE NEW-ENTRY TO THE BOTTOM
+    d3.select('table#contracts tr.new-contract').each(function() {
+      this.parentElement.appendChild(this);
+    });
   }
 
   window.contracts = {
     doselect: doselect,
-    doupdate: doupdate
+    doupdate: doupdate,
+    dodelete: dodelete
   };
 })();

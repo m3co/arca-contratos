@@ -19,10 +19,12 @@
     var query = data.query;
     if (data.row) {
       if (data.module == 'Contracts') {
-        if (data.query == 'select') {
+        if (data.query == 'select' || data.query == 'insert') {
           contracts.doselect(data.row);
         } else if (data.query == 'update') {
           contracts.doupdate(data.row);
+        } else if (data.query == 'delete') {
+          contracts.dodelete(data.row);
         } else {
           console.log('sin procesar Contracts', data);
         }
