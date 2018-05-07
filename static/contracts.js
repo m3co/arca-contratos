@@ -38,9 +38,13 @@
     }
   }
 
-  var defaultRow = {
-    status: 'negotiations'
+  const defaultRow = {
+    status: 'negotiations',
+    title: ''
   };
+  var row = Object.assign({}, defaultRow);
+  row[Symbol.for('defaultrow')] = defaultRow;
+  var newEntry = [row];
 
   function render() {
     var tb;
@@ -49,7 +53,7 @@
     tb = d3.select('table#contracts').selectAll('tr.contract').data(contracts);
     // UPDATE
     tb.selectAll('span')
-      .text((d, i, m) => d[m[i].getAttribute('key')]);
+      .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
     tb.selectAll('input[name="value"]')
       .attr('value', (d, i, m) => d[m[i].getAttribute('key')]);
     tb.selectAll('input[name="id"]')
@@ -76,7 +80,12 @@
     // NEW-ENTRY
     tb = d3.select('table#contracts')
       .selectAll('tr.new-contract')
-      .data([Object.assign({}, defaultRow)]);
+      .data(newEntry);
+
+    tb.selectAll('span')
+      .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
+    tb.selectAll('input[name="value"]')
+      .attr('value', (d, i, m) => d[m[i].getAttribute('key')]);
 
     tr = tb.enter().append('tr').classed('new-contract', true);
     tr.append('td').call(setupRedact('id', 'title', 'Contracts', 'insert'));

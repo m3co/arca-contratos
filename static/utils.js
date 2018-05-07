@@ -1,9 +1,9 @@
 'use strict';
-
+var renderText = t => t ? (t.toString().trim() ? t : '-') : '-';
 function setupRedact(id, key, module, query = 'update') {
   return function redact(selection) {
     selection.append('span')
-      .text(d => d[key] ? (d[key].toString().trim() ? d[key] : '-') : '-')
+      .text(d => renderText(d[key]))
       .attr('key', key)
       .on('click', d => {
         var e = d3.event;
@@ -27,6 +27,7 @@ function setupRedact(id, key, module, query = 'update') {
         span.hidden = false;
 
         var fd = new FormData(form).toJSON();
+        var defaultrow = row[Symbol.for('defaultrow')];
         if (query == 'update') {
           client.emit('data', {
             key: [fd.key],
@@ -37,10 +38,11 @@ function setupRedact(id, key, module, query = 'update') {
         } else {
           row[fd.key] = fd.value;
           client.emit('data', {
-            row: row,
+            row: Object.assign({}, row),
             query: query,
             module: module
           });
+          row = Object.assign(row, defaultrow);
         }
       });
 
