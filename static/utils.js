@@ -49,7 +49,17 @@ function setupRedact(id, key, module, query = 'update') {
     form.append('input')
       .attr('name', 'value')
       .attr('key', key)
-      .attr('value', d => d[key]);
+      .attr('value', d => d[key])
+      .on('blur', row => {
+        var input = d3.event.target;
+        var key = input.getAttribute('key');
+        row[key] = input.value;
+
+        var span = input.closest('td').querySelector('span');
+        d3.select(span).text(d => d[key]);
+        input.hidden = true;
+        span.hidden = false;
+      });
 
     form.append('input')
       .attr('name', 'idkey')
