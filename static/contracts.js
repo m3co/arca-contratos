@@ -52,12 +52,14 @@
 
     tb = d3.select('table#contracts').selectAll('tr.contract').data(contracts);
     // UPDATE
-    tb.selectAll('span')
+    tb.select('span')
       .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
-    tb.selectAll('input[name="value"]')
+    tb.select('input[name="value"]')
       .attr('value', (d, i, m) => d[m[i].getAttribute('key')]);
-    tb.selectAll('input[name="id"]')
+    tb.select('input[name="id"]')
       .attr('value', (d, i, m) => d[m[i].getAttribute('idkey')]);
+    tb.select('button.delete')
+      .attr('id', (d, i, m) => d[m[i].getAttribute('idkey')]);
 
     // ENTER
     tr = tb.enter().append('tr').classed('contract', true);
@@ -65,12 +67,16 @@
     tr.append('td').call(setupRedact('id', 'status', 'Contracts'));
     tr.append('td').append('button')
       .text('-')
+      .classed('delete', true)
+      .attr('id', d => d.id)
+      .attr('idkey', 'id')
       .on('click', d => {
+        var btn = d3.event.target;
         client.emit('data', {
           query: 'delete',
           module: 'Contracts',
-          id: d.id,
-          idkey: 'id'
+          id: btn.getAttribute('id'),
+          idkey: btn.getAttribute('idkey')
         });
       });
 
