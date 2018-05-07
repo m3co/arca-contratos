@@ -1,6 +1,6 @@
 'use strict';
 (() => {
-  var contracts = [];
+  var contractors = [];
   var lastSTO;
 
   function bounceRender() {
@@ -13,7 +13,7 @@
   }
 
   function doupdate(row) {
-    var found = contracts.find(d => d.id == row.id);
+    var found = contractors.find(d => d.id == row.id);
     if (found) {
       Object.keys(found).forEach(key => {
         found[key] = row[key];
@@ -23,9 +23,9 @@
   }
 
   function doselect(row) {
-    var found = contracts.find(d => d.id == row.id);
+    var found = contractors.find(d => d.id == row.id);
     if (!found) {
-      contracts.push(row);
+      contractors.push(row);
       bounceRender();
     }
   }
@@ -36,35 +36,38 @@
   }
 
   function dodelete(row) {
-    var foundIndex = contracts.findIndex(d => d.id == row.id);
+    var foundIndex = contractors.findIndex(d => d.id == row.id);
     if (foundIndex > -1) {
-      contracts.splice(foundIndex, 1);
+      contractors.splice(foundIndex, 1);
       bounceRender();
     }
   }
 
+  var fields = ['email', 'fullname', 'identification', 'person'];
   const defaultRow = {
-    status: 'negotiations',
-    title: ''
+    email: '',
+    fullname: '',
+    identification: '',
+    person: 'natural'
   };
   var newEntry = setupDefault(defaultRow);
-  const fields = ['title', 'status'];
 
   function render() {
     var tb;
     var tr;
 
-    d3.select('table#contracts thead tr')
-      .selectAll('th').data(['Titulo', 'Estado', '-', 'Ir'])
+    d3.select('table#contractors thead tr')
+      .selectAll('th').data(['Email', 'Fullname', 'Identificacion', 'Tipo', '-', 'Ir'])
       .enter().append('th').text(d => d);
-    tb = d3.select('table#contracts tbody')
-      .selectAll('tr.contract').data(contracts);
+    tb = d3.select('table#contractors tbody')
+      .selectAll('tr.contractor').data(contractors);
 
     updateTbody(tb);
 
     // ENTER
-    tr = tb.enter().append('tr').classed('contract', true);
-    setupRedacts('Contracts', 'id', fields, tr);
+    tr = tb.enter().append('tr').classed('contractor', true);
+    setupRedacts('Contractors', 'id', fields, tr);
+
     tr.append('td').append('button')
       .text('-')
       .classed('delete', true)
@@ -74,7 +77,7 @@
         var btn = d3.event.target;
         client.emit('data', {
           query: 'delete',
-          module: 'Contracts',
+          module: 'Contractors',
           id: btn.getAttribute('id'),
           idkey: btn.getAttribute('idkey')
         });
@@ -93,23 +96,23 @@
     tb.exit().remove();
 
     // NEW-ENTRY
-    tb = d3.select('table#contracts')
-      .selectAll('tr.new-contract')
+    tb = d3.select('table#contractors')
+      .selectAll('tr.new-contractor')
       .data(newEntry);
 
     tb.select('span')
       .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
 
-    tr = tb.enter().append('tr').classed('new-contract', true);
-    setupRedacts('Contracts', 'id', fields, tr, 'insert');
+    tr = tb.enter().append('tr').classed('new-contractor', true);
+    setupRedacts('Contractors', 'id', fields, tr, 'insert');
 
     // MOVE NEW-ENTRY TO THE BOTTOM
-    d3.select('table#contracts tr.new-contract').each(function() {
+    d3.select('table#contractors tr.new-contractor').each(function() {
       this.parentElement.appendChild(this);
     });
   }
 
-  window.contracts = {
+  window.contractors = {
     doselect: doselect,
     doupdate: doupdate,
     dodelete: dodelete,

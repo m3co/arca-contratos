@@ -16,14 +16,26 @@
 
     client.emit('data', {
       query: 'select',
-      module: 'Contractors'
+      module: 'Contracts'
     });
   });
 
   client.on('response', (data) => {
     var query = data.query;
     if (data.row) {
-      if (data.module == 'Contracts') {
+      if (data.module == 'Contractors') {
+        if (data.query == 'select') {
+          contractors.doselect(data.row);
+        } else if (data.query == 'update') {
+          contractors.doupdate(data.row);
+        } else if (data.query == 'delete') {
+          contractors.dodelete(data.row);
+        } else if (data.query == 'insert') {
+          contractors.doinsert(data.row);
+        } else {
+          console.log('sin procesar Contractors', data);
+        }
+      } else if (data.module == 'Contracts') {
         if (data.query == 'select') {
           contracts.doselect(data.row);
         } else if (data.query == 'update') {

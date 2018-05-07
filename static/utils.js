@@ -99,3 +99,9 @@ function updateTbody(tb) {
   tb.select('button.delete')
     .attr('id', (d, i, m) => d[m[i].getAttribute('idkey')]);
 }
+
+function setupRedacts(module, idkey, fields, tr, query='update') {
+  fields.forEach(field =>
+    tr.append('td').call(setupRedact(idkey, field, module, query))
+  );
+}
