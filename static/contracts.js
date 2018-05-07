@@ -58,15 +58,8 @@
       .enter().append('th').text(d => d);
     tb = d3.select('table#contracts tbody')
       .selectAll('tr.contract').data(contracts);
-    // UPDATE
-    tb.select('span')
-      .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
-    tb.select('input[name="value"]')
-      .attr('value', (d, i, m) => d[m[i].getAttribute('key')]);
-    tb.select('input[name="id"]')
-      .attr('value', (d, i, m) => d[m[i].getAttribute('idkey')]);
-    tb.select('button.delete')
-      .attr('id', (d, i, m) => d[m[i].getAttribute('idkey')]);
+
+    updateTbody(tb);
 
     // ENTER
     tr = tb.enter().append('tr').classed('contract', true);

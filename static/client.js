@@ -10,8 +10,13 @@
     });
 
     client.emit('data', {
+      query: 'subscribe',
+      module: 'Contractors'
+    });
+
+    client.emit('data', {
       query: 'select',
-      module: 'Contracts'
+      module: 'Contractors'
     });
   });
 

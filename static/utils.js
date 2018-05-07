@@ -87,3 +87,15 @@ function setupDefault(defaultRow) {
   row[Symbol.for('defaultrow')] = defaultRow;
   return [row];
 }
+
+function updateTbody(tb) {
+  // UPDATE
+  tb.select('span')
+    .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
+  tb.select('input[name="value"]')
+    .attr('value', (d, i, m) => d[m[i].getAttribute('key')]);
+  tb.select('input[name="id"]')
+    .attr('value', (d, i, m) => d[m[i].getAttribute('idkey')]);
+  tb.select('button.delete')
+    .attr('id', (d, i, m) => d[m[i].getAttribute('idkey')]);
+}
