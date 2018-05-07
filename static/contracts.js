@@ -53,7 +53,11 @@
     var tb;
     var tr;
 
-    tb = d3.select('table#contracts').selectAll('tr.contract').data(contracts);
+    d3.select('table#contracts thead tr')
+      .selectAll('th').data(['Titulo', 'Estado', '-', 'Ir'])
+      .enter().append('th').text(d => d);
+    tb = d3.select('table#contracts tbody')
+      .selectAll('tr.contract').data(contracts);
     // UPDATE
     tb.select('span')
       .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
@@ -81,6 +85,15 @@
           id: btn.getAttribute('id'),
           idkey: btn.getAttribute('idkey')
         });
+      });
+
+    tr.append('td').append('button')
+      .text('->')
+      .classed('show', true)
+      .attr('idkey', 'id')
+      .on('click', d => {
+        var btn = d3.event.target;
+        console.log(btn, d);
       });
 
     // EXIT
