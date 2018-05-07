@@ -30,11 +30,11 @@
     }
   }
 
-  function setupRedact(id, key) {
+  function setupRedact(id, key, module, query = 'update') {
     return function redact(selection) {
       selection.append('span')
         .text(d => d[key])
-        .attr('column', key)
+        .attr('key', key)
         .on('click', d => {
           var e = d3.event;
           e.preventDefault();
@@ -59,14 +59,14 @@
           var fd = new FormData(form).toJSON();
           fd.key = [fd.key];
           fd.value = [fd.value];
-          fd.query = 'update';
-          fd.module = 'Contracts';
+          fd.query = query;
+          fd.module = module;
           client.emit('data', fd);
         });
 
       form.append('input')
         .attr('name', 'value')
-        .attr('column', key)
+        .attr('key', key)
         .attr('value', d => d[key]);
 
       form.append('input')
@@ -81,6 +81,7 @@
 
       form.append('input')
         .attr('name', 'id')
+        .attr('idkey', id)
         .attr('value', d => d[id])
         .attr('type', 'hidden');
     }
@@ -90,14 +91,16 @@
     var tb = d3.select('table#contracts').selectAll('tr.contract').data(contracts);
 
     tb.selectAll('span')
-      .text((d, i, m) => d[m[i].getAttribute('column')]);
+      .text((d, i, m) => d[m[i].getAttribute('key')]);
     tb.selectAll('input[name="value"]')
-      .attr('value', (d, i, m) => d[m[i].getAttribute('column')]);
+      .attr('value', (d, i, m) => d[m[i].getAttribute('key')]);
+    tb.selectAll('input[name="id"]')
+      .attr('value', (d, i, m) => d[m[i].getAttribute('idkey')]);
 
     tb.exit().remove();
     var tr = tb.enter().append('tr').classed('contract', true);
-    tr.append('td').call(setupRedact('id', 'title'));
-    tr.append('td').call(setupRedact('id', 'status'));
+    tr.append('td').call(setupRedact('id', 'title', 'Contracts'));
+    tr.append('td').call(setupRedact('id', 'status', 'Contracts'));
   }
 
   window.contracts = {
