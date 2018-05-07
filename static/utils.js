@@ -1,6 +1,6 @@
 'use strict';
 var renderText = t => t ? (t.toString().trim() ? t : '-') : '-';
-function setupRedact(id, key, module, query = 'update') {
+function setupRedact(idkey, key, module, query = 'update') {
   return function redact(selection) {
     selection.append('span')
       .text(d => renderText(d[key]))
@@ -11,6 +11,8 @@ function setupRedact(id, key, module, query = 'update') {
         var form = span.parentElement.querySelector('form');
         span.hidden = true;
         form.hidden = false;
+
+        form.querySelector('input[name="value"]').select();
       });
 
     var form = selection.append('form')
@@ -42,7 +44,7 @@ function setupRedact(id, key, module, query = 'update') {
             query: query,
             module: module
           });
-          row = Object.assign(row, defaultrow);
+          Object.assign(row, defaultrow);
         }
       });
 
@@ -64,7 +66,7 @@ function setupRedact(id, key, module, query = 'update') {
 
     form.append('input')
       .attr('name', 'idkey')
-      .attr('value', id)
+      .attr('value', idkey)
       .attr('type', 'hidden');
 
     form.append('input')
@@ -74,9 +76,14 @@ function setupRedact(id, key, module, query = 'update') {
 
     form.append('input')
       .attr('name', 'id')
-      .attr('idkey', id)
-      .attr('value', d => d[id])
+      .attr('idkey', idkey)
+      .attr('value', d => d[idkey])
       .attr('type', 'hidden');
   }
 }
 
+function setupDefault(defaultRow) {
+  var row = Object.assign({}, defaultRow);
+  row[Symbol.for('defaultrow')] = defaultRow;
+  return [row];
+}

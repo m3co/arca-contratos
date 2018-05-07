@@ -30,6 +30,11 @@
     }
   }
 
+  function doinsert(row) {
+    newEntry = setupDefault(defaultRow);
+    doselect(row);
+  }
+
   function dodelete(row) {
     var foundIndex = contracts.findIndex(d => d.id == row.id);
     if (foundIndex > -1) {
@@ -42,9 +47,7 @@
     status: 'negotiations',
     title: ''
   };
-  var row = Object.assign({}, defaultRow);
-  row[Symbol.for('defaultrow')] = defaultRow;
-  var newEntry = [row];
+  var newEntry = setupDefault(defaultRow);
 
   function render() {
     var tb;
@@ -90,8 +93,6 @@
 
     tb.select('span')
       .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
-    tb.select('input[name="value"]')
-      .attr('value', (d, i, m) => d[m[i].getAttribute('key')]);
 
     tr = tb.enter().append('tr').classed('new-contract', true);
     tr.append('td').call(setupRedact('id', 'title', 'Contracts', 'insert'));
@@ -106,6 +107,7 @@
   window.contracts = {
     doselect: doselect,
     doupdate: doupdate,
-    dodelete: dodelete
+    dodelete: dodelete,
+    doinsert: doinsert
   };
 })();
