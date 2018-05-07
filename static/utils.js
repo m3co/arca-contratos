@@ -7,8 +7,6 @@ function setupRedact(id, key, module, query = 'update') {
       .attr('key', key)
       .on('click', d => {
         var e = d3.event;
-        e.preventDefault();
-
         var span = e.target;
         var form = span.parentElement.querySelector('form');
         span.hidden = true;
@@ -30,6 +28,8 @@ function setupRedact(id, key, module, query = 'update') {
         var defaultrow = row[Symbol.for('defaultrow')];
         if (query == 'update') {
           client.emit('data', {
+            id: fd.id,
+            idkey: fd.idkey,
             key: [fd.key],
             value: [fd.value],
             query: query,
@@ -52,12 +52,13 @@ function setupRedact(id, key, module, query = 'update') {
       .attr('value', d => d[key])
       .on('blur', row => {
         var input = d3.event.target;
+        var form = input.closest('form');
         var key = input.getAttribute('key');
         row[key] = input.value;
 
         var span = input.closest('td').querySelector('span');
-        d3.select(span).text(d => d[key]);
-        input.hidden = true;
+        d3.select(span).text(d => renderText(d[key]));
+        form.hidden = true;
         span.hidden = false;
       });
 

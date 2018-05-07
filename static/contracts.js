@@ -88,9 +88,9 @@
       .selectAll('tr.new-contract')
       .data(newEntry);
 
-    tb.selectAll('span')
+    tb.select('span')
       .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
-    tb.selectAll('input[name="value"]')
+    tb.select('input[name="value"]')
       .attr('value', (d, i, m) => d[m[i].getAttribute('key')]);
 
     tr = tb.enter().append('tr').classed('new-contract', true);
