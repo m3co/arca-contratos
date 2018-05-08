@@ -47,8 +47,14 @@
     status: 'negotiations',
     title: ''
   };
+  const validations = {
+    status: { required: true },
+    title: { required: true }
+  };
+
   var newEntry = setupDefault(defaultRow);
   const fields = ['title', 'status'];
+  fields[Symbol.for('validations')] = validations;
 
   setTimeout(() => {
     d3.select('table#contracts thead tr')
@@ -68,7 +74,7 @@
     tb.exit().remove();
 
     // UPDATE
-    updateTbody(tb);
+    updateTbody(tb, validations);
     tb.select('button.show')
       .on('click', d => {
         var btn = d3.event.target;

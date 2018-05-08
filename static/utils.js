@@ -16,7 +16,7 @@ function defineBlurHandler(row) {
   span.hidden = false;
 }
 
-function defineSubmitHandler(row) {
+function defineSubmitHandler(validations, row) {
   var e = d3.event;
   e.preventDefault();
 
@@ -27,6 +27,38 @@ function defineSubmitHandler(row) {
 
   var fd = new FormData(form).toJSON();
   row[fd.key] = fd.value;
+
+  var valid = Object.keys(validations).reduce((acc, key) => {
+    var validation = validations[key];
+    function validateKey() {
+      if (validation.required) {
+        if (!row[key]) {
+          if (!(acc instanceof Object)) {
+            acc = {};
+          }
+          acc[key] = 'required';
+        }
+      }
+      return acc;
+    }
+
+    if (acc instanceof Object) {
+      return validateKey();
+    }
+    if (!acc) {
+      return acc;
+    }
+    if (!row.hasOwnProperty(key)) {
+      return acc;
+    }
+    return validateKey();
+  }, true);
+
+  if (valid instanceof Object) {
+    console.log('errors', valid);
+    return;
+  }
+
   if (fd.query == 'update') {
     var keys = Object.keys(row).filter(d => !excludeFields.includes(d));
     client.emit('data', {
@@ -43,12 +75,10 @@ function defineSubmitHandler(row) {
       query: fd.query,
       module: fd.module
     });
-    var defaultrow = row[Symbol.for('defaultrow')];
-    Object.assign(row, defaultrow);
   }
 }
 
-function setupRedact(idkey, key, module, query = 'update') {
+function setupRedact(idkey, key, module, validations, query = 'update') {
   return function redact(selection) {
     selection.append('span')
       .text(d => renderText(d[key]))
@@ -65,7 +95,7 @@ function setupRedact(idkey, key, module, query = 'update') {
 
     var form = selection.append('form')
       .attr('hidden', '')
-      .on('submit', defineSubmitHandler);
+      .on('submit', defineSubmitHandler.bind(null, validations));
 
     form.append('input')
       .attr('name', 'value')
@@ -107,7 +137,7 @@ function setupDefault(defaultRow) {
   return [row];
 }
 
-function updateTbody(tb) {
+function updateTbody(tb, validations) {
   // UPDATE
   tb.select('span')
     .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
@@ -119,11 +149,13 @@ function updateTbody(tb) {
   tb.select('button.delete')
     .attr('id', (d, i, m) => d[m[i].getAttribute('idkey')]);
   tb.select('form')
-    .on('submit', defineSubmitHandler);
+    .on('submit', defineSubmitHandler.bind(null, validations));
 }
 
 function setupRedacts(module, idkey, fields, tr, query='update') {
   fields.forEach(field =>
-    tr.append('td').call(setupRedact(idkey, field, module, query))
+    tr.append('td')
+      .call(setupRedact(idkey, field, module,
+          fields[Symbol.for('validations')], query))
   );
 }
