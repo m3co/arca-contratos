@@ -1,7 +1,54 @@
 'use strict';
-var renderText = t => t ? (t.toString().trim() ? t : '-') : '-';
+const excludeFields = ['id', 'createdAt'];
+function renderText(t) {
+  return t ? (t.toString().trim() ? t : '-') : '-';
+}
+
+function defineBlurHandler(row) {
+  var input = d3.event.target;
+  var form = input.closest('form');
+  var key = input.getAttribute('key');
+  row[key] = input.value;
+
+  var span = input.closest('td').querySelector('span');
+  d3.select(span).text(d => renderText(d[key]));
+  form.hidden = true;
+  span.hidden = false;
+}
+
+function defineSubmitHandler(row) {
+  var e = d3.event;
+  e.preventDefault();
+
+  var form = e.target;
+  var span = form.parentElement.querySelector('span');
+  form.hidden = true;
+  span.hidden = false;
+
+  var fd = new FormData(form).toJSON();
+  row[fd.key] = fd.value;
+  if (fd.query == 'update') {
+    var keys = Object.keys(row).filter(d => !excludeFields.includes(d));
+    client.emit('data', {
+      id: fd.id,
+      idkey: fd.idkey,
+      key: keys,
+      value: keys.map(key => row[key]),
+      query: fd.query,
+      module: fd.module
+    });
+  } else {
+    client.emit('data', {
+      row: Object.assign({}, row),
+      query: fd.query,
+      module: fd.module
+    });
+    var defaultrow = row[Symbol.for('defaultrow')];
+    Object.assign(row, defaultrow);
+  }
+}
+
 function setupRedact(idkey, key, module, query = 'update') {
-  const exclude = ['id', 'createdAt'];
   return function redact(selection) {
     selection.append('span')
       .text(d => renderText(d[key]))
@@ -18,53 +65,23 @@ function setupRedact(idkey, key, module, query = 'update') {
 
     var form = selection.append('form')
       .attr('hidden', '')
-      .on('submit', row => {
-        var e = d3.event;
-        e.preventDefault();
-
-        var form = e.target;
-        var span = form.parentElement.querySelector('span');
-        form.hidden = true;
-        span.hidden = false;
-
-        var fd = new FormData(form).toJSON();
-        row[fd.key] = fd.value;
-        if (query == 'update') {
-          var keys = Object.keys(row).filter(d => !exclude.includes(d));
-          client.emit('data', {
-            id: fd.id,
-            idkey: fd.idkey,
-            key: keys,
-            value: keys.map(key => row[key]),
-            query: query,
-            module: module
-          });
-        } else {
-          client.emit('data', {
-            row: Object.assign({}, row),
-            query: query,
-            module: module
-          });
-          var defaultrow = row[Symbol.for('defaultrow')];
-          Object.assign(row, defaultrow);
-        }
-      });
+      .on('submit', defineSubmitHandler);
 
     form.append('input')
       .attr('name', 'value')
       .attr('key', key)
       .attr('value', d => d[key])
-      .on('blur', row => {
-        var input = d3.event.target;
-        var form = input.closest('form');
-        var key = input.getAttribute('key');
-        row[key] = input.value;
+      .on('blur', defineBlurHandler);
 
-        var span = input.closest('td').querySelector('span');
-        d3.select(span).text(d => renderText(d[key]));
-        form.hidden = true;
-        span.hidden = false;
-      });
+    form.append('input')
+      .attr('name', 'module')
+      .attr('value', module)
+      .attr('type', 'hidden');
+
+    form.append('input')
+      .attr('name', 'query')
+      .attr('value', query)
+      .attr('type', 'hidden');
 
     form.append('input')
       .attr('name', 'idkey')
@@ -95,11 +112,16 @@ function updateTbody(tb) {
   tb.select('span')
     .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
   tb.select('input[name="value"]')
-    .attr('value', (d, i, m) => d[m[i].getAttribute('key')]);
+    .attr('value', (d, i, m) => d[m[i].getAttribute('key')])
+    .on('blur', null)
+    .on('blur', defineBlurHandler);
   tb.select('input[name="id"]')
     .attr('value', (d, i, m) => d[m[i].getAttribute('idkey')]);
   tb.select('button.delete')
     .attr('id', (d, i, m) => d[m[i].getAttribute('idkey')]);
+  tb.select('form')
+    .on('submit', null)
+    .on('submit', defineSubmitHandler);
 }
 
 function setupRedacts(module, idkey, fields, tr, query='update') {

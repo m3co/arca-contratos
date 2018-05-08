@@ -104,6 +104,7 @@
 
     tb.select('span')
       .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
+    // Aqui hace falta hacer actualizar la forma...
 
     tr = tb.enter().append('tr').classed('new-contract', true);
     setupRedacts('Contracts', 'id', fields, tr, 'insert');
