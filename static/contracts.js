@@ -50,16 +50,24 @@
   var newEntry = setupDefault(defaultRow);
   const fields = ['title', 'status'];
 
+  setTimeout(() => {
+    d3.select('table#contracts thead tr')
+      .selectAll('th').data(['Titulo', 'Estado', '-', 'Ir'])
+      .enter().append('th').text(d => d);
+  }, 0);
+
   function render() {
     var tb;
     var tr;
 
-    d3.select('table#contracts thead tr')
-      .selectAll('th').data(['Titulo', 'Estado', '-', 'Ir'])
-      .enter().append('th').text(d => d);
+    // SELECT
     tb = d3.select('table#contracts tbody')
       .selectAll('tr.contract').data(contracts);
 
+    // EXIT
+    tb.exit().remove();
+
+    // UPDATE
     updateTbody(tb);
 
     // ENTER
@@ -88,9 +96,6 @@
         var btn = d3.event.target;
         console.log(btn, d);
       });
-
-    // EXIT
-    tb.exit().remove();
 
     // NEW-ENTRY
     tb = d3.select('table#contracts')
