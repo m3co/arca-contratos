@@ -48,11 +48,11 @@
     title: ''
   };
   var newEntry = setupDefault(defaultRow);
-  const fields = ['title', 'status'];
+  const fields = ['title'];
 
   setTimeout(() => {
     d3.select('table#contracts thead tr')
-      .selectAll('th').data(['Titulo', 'Estado', '-', 'Ir'])
+      .selectAll('th').data(['Titulo', '-', 'Ir'])
       .enter().append('th').text(d => d);
   }, 0);
 

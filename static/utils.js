@@ -1,6 +1,7 @@
 'use strict';
 var renderText = t => t ? (t.toString().trim() ? t : '-') : '-';
 function setupRedact(idkey, key, module, query = 'update') {
+  const exclude = ['id', 'createdAt'];
   return function redact(selection) {
     selection.append('span')
       .text(d => renderText(d[key]))
@@ -27,23 +28,24 @@ function setupRedact(idkey, key, module, query = 'update') {
         span.hidden = false;
 
         var fd = new FormData(form).toJSON();
-        var defaultrow = row[Symbol.for('defaultrow')];
+        row[fd.key] = fd.value;
         if (query == 'update') {
+          var keys = Object.keys(row).filter(d => !exclude.includes(d));
           client.emit('data', {
             id: fd.id,
             idkey: fd.idkey,
-            key: [fd.key],
-            value: [fd.value],
+            key: keys,
+            value: keys.map(key => row[key]),
             query: query,
             module: module
           });
         } else {
-          row[fd.key] = fd.value;
           client.emit('data', {
             row: Object.assign({}, row),
             query: query,
             module: module
           });
+          var defaultrow = row[Symbol.for('defaultrow')];
           Object.assign(row, defaultrow);
         }
       });
