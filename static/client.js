@@ -16,7 +16,7 @@
 
     client.emit('data', {
       query: 'select',
-      module: 'Contracts'
+      module: 'Contractors'
     });
   });
 

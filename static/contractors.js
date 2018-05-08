@@ -43,31 +43,49 @@
     }
   }
 
-  var fields = ['email', 'fullname', 'identification', 'person'];
   const defaultRow = {
     email: '',
-    fullname: '',
-    identification: '',
-    person: 'natural'
+    fullname: ''
   };
+  const validations = {
+    email: { required: true },
+    fullname: { required: true }
+  };
+
   var newEntry = setupDefault(defaultRow);
+  const fields = [
+    'email', 'fullname'
+  ];
+  fields[Symbol.for('validations')] = validations;
+
+  setTimeout(() => {
+    d3.select('table#contractors thead tr')
+      .selectAll('th').data(['Titulo', 'Estado', '-', 'Ir'])
+      .enter().append('th').text(d => d);
+  }, 0);
 
   function render() {
     var tb;
     var tr;
 
-    d3.select('table#contractors thead tr')
-      .selectAll('th').data(['Email', 'Fullname', 'Identificacion', 'Tipo', '-', 'Ir'])
-      .enter().append('th').text(d => d);
+    // SELECT
     tb = d3.select('table#contractors tbody')
-      .selectAll('tr.contractor').data(contractors);
+      .selectAll('tr.contract').data(contractors);
 
-    updateTbody(tb);
+    // EXIT
+    tb.exit().remove();
+
+    // UPDATE
+    updateTbody(tb, validations);
+    tb.select('button.show')
+      .on('click', d => {
+        var btn = d3.event.target;
+        console.log(btn, d, 'now what');
+      });
 
     // ENTER
-    tr = tb.enter().append('tr').classed('contractor', true);
-    setupRedacts('Contractors', 'id', fields, tr);
-
+    tr = tb.enter().append('tr').classed('contract', true);
+    setupRedacts('Contracts', 'id', fields, tr);
     tr.append('td').append('button')
       .text('-')
       .classed('delete', true)
@@ -77,7 +95,7 @@
         var btn = d3.event.target;
         client.emit('data', {
           query: 'delete',
-          module: 'Contractors',
+          module: 'Contracts',
           id: btn.getAttribute('id'),
           idkey: btn.getAttribute('idkey')
         });
@@ -92,22 +110,20 @@
         console.log(btn, d);
       });
 
-    // EXIT
-    tb.exit().remove();
-
     // NEW-ENTRY
     tb = d3.select('table#contractors')
-      .selectAll('tr.new-contractor')
+      .selectAll('tr.new-contract')
       .data(newEntry);
 
     tb.select('span')
       .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
+    // Aqui hace falta hacer actualizar la forma...
 
-    tr = tb.enter().append('tr').classed('new-contractor', true);
-    setupRedacts('Contractors', 'id', fields, tr, 'insert');
+    tr = tb.enter().append('tr').classed('new-contract', true);
+    setupRedacts('Contracts', 'id', fields, tr, 'insert');
 
     // MOVE NEW-ENTRY TO THE BOTTOM
-    d3.select('table#contractors tr.new-contractor').each(function() {
+    d3.select('table#contractors tr.new-contract').each(function() {
       this.parentElement.appendChild(this);
     });
   }
