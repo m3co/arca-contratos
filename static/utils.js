@@ -113,14 +113,12 @@ function updateTbody(tb) {
     .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
   tb.select('input[name="value"]')
     .attr('value', (d, i, m) => d[m[i].getAttribute('key')])
-    .on('blur', null)
     .on('blur', defineBlurHandler);
   tb.select('input[name="id"]')
     .attr('value', (d, i, m) => d[m[i].getAttribute('idkey')]);
   tb.select('button.delete')
     .attr('id', (d, i, m) => d[m[i].getAttribute('idkey')]);
   tb.select('form')
-    .on('submit', null)
     .on('submit', defineSubmitHandler);
 }
 

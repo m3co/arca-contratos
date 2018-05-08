@@ -48,11 +48,11 @@
     title: ''
   };
   var newEntry = setupDefault(defaultRow);
-  const fields = ['title'];
+  const fields = ['title', 'status'];
 
   setTimeout(() => {
     d3.select('table#contracts thead tr')
-      .selectAll('th').data(['Titulo', '-', 'Ir'])
+      .selectAll('th').data(['Titulo', 'Estado', '-', 'Ir'])
       .enter().append('th').text(d => d);
   }, 0);
 
@@ -69,6 +69,11 @@
 
     // UPDATE
     updateTbody(tb);
+    tb.select('button.show')
+      .on('click', d => {
+        var btn = d3.event.target;
+        console.log(btn, d, 'now what');
+      });
 
     // ENTER
     tr = tb.enter().append('tr').classed('contract', true);
