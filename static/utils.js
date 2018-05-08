@@ -78,7 +78,11 @@ function defineSubmitHandler(validations, row) {
   }
 }
 
-function setupRedact(idkey, key, module, validations, query = 'update') {
+function setupRedact(idkey, field, module, validations, query = 'update') {
+  var key = field;
+  if (field instanceof Object) {
+    key = field.name;
+  }
   return function redact(selection) {
     selection.append('span')
       .text(d => renderText(d[key]))
@@ -101,7 +105,16 @@ function setupRedact(idkey, key, module, validations, query = 'update') {
       .attr('name', 'value')
       .attr('key', key)
       .attr('value', d => d[key])
-      .on('blur', defineBlurHandler);
+      .on('blur', defineBlurHandler)
+      .each(function() {
+        if (field instanceof Object) {
+          Object.keys(field).forEach(key => {
+            if (key != 'name') {
+              this.setAttribute(key, field[key]);
+            }
+          });
+        }
+      });
 
     form.append('input')
       .attr('name', 'module')
@@ -153,13 +166,9 @@ function updateTbody(tb, validations) {
 }
 
 function setupRedacts(module, idkey, fields, tr, query='update') {
-  fields.forEach(o => {
-    var field = o;
-    if (o instanceof Object) {
-      field = o.name;
-    }
+  fields.forEach(field => {
     tr.append('td')
       .call(setupRedact(idkey, field, module,
-          fields[Symbol.for('validations')], query));
+        fields[Symbol.for('validations')], query));
   });
 }

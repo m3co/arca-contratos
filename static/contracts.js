@@ -53,26 +53,13 @@
   };
 
   var newEntry = setupDefault(defaultRow);
-  const fields = ['title', {
-    name: 'status',
-    type: 'enum',
-    enums: [{
-      value: 'negociations',
-      text: 'negociaciones'
-    }, {
-      value: 'signed',
-      text: 'firmado'
-    }, {
-      value: 'executed',
-      text: 'ejecutado'
-    }, {
-      value: 'good standing',
-      text: 'a paz y salvo'
-    }, {
-      value: 'canceled',
-      text: 'terminado irregularmente'
-    }]
-  }];
+  const fields = [
+    'title',
+    {
+      name: 'status',
+      list: 'contract-status'
+    }
+  ];
   fields[Symbol.for('validations')] = validations;
 
   setTimeout(() => {
