@@ -153,9 +153,13 @@ function updateTbody(tb, validations) {
 }
 
 function setupRedacts(module, idkey, fields, tr, query='update') {
-  fields.forEach(field =>
+  fields.forEach(o => {
+    var field = o;
+    if (o instanceof Object) {
+      field = o.name;
+    }
     tr.append('td')
       .call(setupRedact(idkey, field, module,
-          fields[Symbol.for('validations')], query))
-  );
+          fields[Symbol.for('validations')], query));
+  });
 }
