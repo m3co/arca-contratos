@@ -75,6 +75,16 @@ function defineSubmitHandler(validations, row) {
       query: fd.query,
       module: fd.module
     });
+    var defaultrow = row[Symbol.for('defaultrow')];
+    var tr = form.closest('.new-row');
+    Object.keys(defaultrow)
+      .forEach(key => {
+        row[key] = defaultrow[key];
+        tr.querySelector(`input[name="value"][key="${key}"]`)
+          .value = defaultrow[key];
+        tr.querySelector(`span[key="${key}"]`)
+          .text = defaultrow[key];
+      });
   }
 }
 
@@ -202,7 +212,6 @@ function setupTable(module, header, actions, fields, idkey, validations, default
   }
 
   function doinsert(row) {
-    newEntry = setupDefault(defaultRow);
     doselect(row);
   }
 
@@ -255,13 +264,6 @@ function setupTable(module, header, actions, fields, idkey, validations, default
       tr.append('td').append('button').call(action.setup));
 
     // MOVE NEW-ENTRY TO THE BOTTOM
-    tb = d3.select(`table#${module}`)
-      .selectAll('tr.new-row')
-      .data(newEntry);
-
-    tb.select('span')
-      .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
-
     d3.select(`table#${module} tr.new-row`).each(function() {
       this.parentElement.appendChild(this);
     });
