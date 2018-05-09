@@ -1,8 +1,25 @@
 'use strict';
 (() => {
+  const defaultRow = {
+    status: 'negotiations',
+    title: ''
+  };
+  const validations = {
+    status: { required: true },
+    title: { required: true }
+  };
+
+  const fields = [
+    'title',
+    {
+      name: 'status',
+      list: 'contract-status'
+    }
+  ];
+
+function setupContracts() {
   var contracts = [];
   var lastSTO;
-
   function bounceRender() {
     if (lastSTO !== undefined) {
       clearTimeout(lastSTO);
@@ -43,24 +60,8 @@
     }
   }
 
-  const defaultRow = {
-    status: 'negotiations',
-    title: ''
-  };
-  const validations = {
-    status: { required: true },
-    title: { required: true }
-  };
-
-  var newEntry = setupDefault(defaultRow);
-  const fields = [
-    'title',
-    {
-      name: 'status',
-      list: 'contract-status'
-    }
-  ];
   fields[Symbol.for('validations')] = validations;
+  var newEntry = setupDefault(defaultRow);
 
   setTimeout(() => {
     var tb, tr;
@@ -136,10 +137,12 @@
     });
   }
 
-  window.contracts = {
+  return {
     doselect: doselect,
     doupdate: doupdate,
     dodelete: dodelete,
     doinsert: doinsert
   };
+}
+  window.contracts = setupContracts();
 })();
