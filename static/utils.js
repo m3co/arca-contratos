@@ -172,7 +172,6 @@ function setupRedacts(module, idkey, fields, tr, query='update') {
 }
 
 function setupTable(module, header, actions, fields, validations, defaultRow={}) {
-
   var storage = [];
   var lastSTO;
   function bounceRender() {
