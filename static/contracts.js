@@ -63,9 +63,18 @@
   fields[Symbol.for('validations')] = validations;
 
   setTimeout(() => {
+    var tb, tr;
     d3.select('table#contracts thead tr')
       .selectAll('th').data(['Titulo', 'Estado', '-', 'Ir'])
       .enter().append('th').text(d => d);
+
+    // NEW-ENTRY
+    tb = d3.select('table#contracts')
+      .selectAll('tr.new-contract')
+      .data(newEntry);
+
+    tr = tb.enter().append('tr').classed('new-contract', true);
+    setupRedacts('Contracts', 'id', fields, tr, 'insert');
   }, 0);
 
   function render() {
@@ -114,19 +123,14 @@
         console.log(btn, d);
       });
 
-    // NEW-ENTRY
+    // MOVE NEW-ENTRY TO THE BOTTOM
     tb = d3.select('table#contracts')
       .selectAll('tr.new-contract')
       .data(newEntry);
 
     tb.select('span')
       .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
-    // Aqui hace falta hacer actualizar la forma...
 
-    tr = tb.enter().append('tr').classed('new-contract', true);
-    setupRedacts('Contracts', 'id', fields, tr, 'insert');
-
-    // MOVE NEW-ENTRY TO THE BOTTOM
     d3.select('table#contracts tr.new-contract').each(function() {
       this.parentElement.appendChild(this);
     });
