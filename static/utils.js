@@ -172,6 +172,29 @@ function setupRedacts(module, idkey, fields, tr, query='update') {
 }
 
 function setupTable(module, header, fields, validations, defaultRow={}) {
+  var actions = [
+    (selection => selection
+      .text('-')
+      .classed('delete', true)
+      .on('click', d => {
+        client.emit('data', {
+          query: 'delete',
+          module: 'Contracts',
+          id: d.id,
+          idkey: 'id'
+        });
+      })
+    ),
+    (selection => selection
+      .text('->')
+      .classed('show', true)
+      .on('click', d => {
+        var btn = d3.event.target;
+        console.log(btn, d);
+      })
+    )
+  ];
+
   var storage = [];
   var lastSTO;
   function bounceRender() {
@@ -245,43 +268,14 @@ function setupTable(module, header, fields, validations, defaultRow={}) {
 
     // UPDATE
     updateTbody(tb, validations);
-    tb.select('button.delete')
-      .on('click', d => {
-        client.emit('data', {
-          query: 'delete',
-          module: 'Contracts',
-          id: d.id,
-          idkey: 'id'
-        });
-      });
-    tb.select('button.show')
-      .on('click', d => {
-        var btn = d3.event.target;
-        console.log(btn, d, 'now what');
-      });
+    tb.select('button.delete').call(actions[0]);
+    tb.select('button.show').call(actions[1]);
 
     // ENTER
     tr = tb.enter().append('tr').classed('row', true);
     setupRedacts(module, 'id', fields, tr);
-    tr.append('td').append('button')
-      .text('-')
-      .classed('delete', true)
-      .on('click', d => {
-        client.emit('data', {
-          query: 'delete',
-          module: 'Contracts',
-          id: d.id,
-          idkey: 'id'
-        });
-      });
-
-    tr.append('td').append('button')
-      .text('->')
-      .classed('show', true)
-      .on('click', d => {
-        var btn = d3.event.target;
-        console.log(btn, d);
-      });
+    tr.append('td').append('button').call(actions[0]);
+    tr.append('td').append('button').call(actions[1]);
 
     // MOVE NEW-ENTRY TO THE BOTTOM
     tb = d3.select(`table#${module}`)
