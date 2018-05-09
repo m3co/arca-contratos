@@ -171,7 +171,7 @@ function setupRedacts(module, idkey, fields, tr, query='update') {
   });
 }
 
-function setupTable(module, header, actions, fields, validations, defaultRow={}) {
+function setupTable(module, header, actions, fields, idkey, validations, defaultRow={}) {
   var storage = [];
   var lastSTO;
   function bounceRender() {
@@ -229,7 +229,7 @@ function setupTable(module, header, actions, fields, validations, defaultRow={})
       .data(newEntry);
 
     tr = tb.enter().append('tr').classed('new-row', true);
-    setupRedacts(module, 'id', fields, tr, 'insert');
+    setupRedacts(module, idkey, fields, tr, 'insert');
   }, 0);
 
   function render() {
@@ -250,7 +250,7 @@ function setupTable(module, header, actions, fields, validations, defaultRow={})
 
     // ENTER
     tr = tb.enter().append('tr').classed('row', true);
-    setupRedacts(module, 'id', fields, tr);
+    setupRedacts(module, idkey, fields, tr);
     actions.forEach(action =>
       tr.append('td').append('button').call(action.setup));
 

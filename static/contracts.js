@@ -44,5 +44,5 @@
   }];
 
   window.contracts = setupTable('Contracts', header, actions,
-    fields, validations, defaultRow);
+    fields, 'id', validations, defaultRow);
 })();

@@ -40,5 +40,5 @@
   }];
 
   window.contractors = setupTable('Contractors', header, actions,
-    fields, validations, defaultRow);
+    fields, 'id', validations, defaultRow);
 })();
