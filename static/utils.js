@@ -159,8 +159,6 @@ function updateTbody(tb, validations) {
     .on('blur', defineBlurHandler);
   tb.select('input[name="id"]')
     .attr('value', (d, i, m) => d[m[i].getAttribute('idkey')]);
-  tb.select('button.delete')
-    .attr('id', (d, i, m) => d[m[i].getAttribute('idkey')]);
   tb.select('form')
     .on('submit', defineSubmitHandler.bind(null, validations));
 }
@@ -247,6 +245,15 @@ function setupTable(module, header, fields, validations, defaultRow={}) {
 
     // UPDATE
     updateTbody(tb, validations);
+    tb.select('button.delete')
+      .on('click', d => {
+        client.emit('data', {
+          query: 'delete',
+          module: 'Contracts',
+          id: d.id,
+          idkey: 'id'
+        });
+      });
     tb.select('button.show')
       .on('click', d => {
         var btn = d3.event.target;
@@ -259,22 +266,18 @@ function setupTable(module, header, fields, validations, defaultRow={}) {
     tr.append('td').append('button')
       .text('-')
       .classed('delete', true)
-      .attr('id', d => d.id)
-      .attr('idkey', 'id')
       .on('click', d => {
-        var btn = d3.event.target;
         client.emit('data', {
           query: 'delete',
           module: 'Contracts',
-          id: btn.getAttribute('id'),
-          idkey: btn.getAttribute('idkey')
+          id: d.id,
+          idkey: 'id'
         });
       });
 
     tr.append('td').append('button')
       .text('->')
       .classed('show', true)
-      .attr('idkey', 'id')
       .on('click', d => {
         var btn = d3.event.target;
         console.log(btn, d);
