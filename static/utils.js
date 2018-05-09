@@ -173,8 +173,8 @@ function setupRedacts(module, idkey, fields, tr, query='update') {
   });
 }
 
-function setupTable(fields, validations, defaultRow={}) {
-  var contracts = [];
+function setupTable(module, header, fields, validations, defaultRow={}) {
+  var storage = [];
   var lastSTO;
   function bounceRender() {
     if (lastSTO !== undefined) {
@@ -186,7 +186,7 @@ function setupTable(fields, validations, defaultRow={}) {
   }
 
   function doupdate(row) {
-    var found = contracts.find(d => d.id == row.id);
+    var found = storage.find(d => d.id == row.id);
     if (found) {
       Object.keys(found).forEach(key => {
         found[key] = row[key];
@@ -196,9 +196,9 @@ function setupTable(fields, validations, defaultRow={}) {
   }
 
   function doselect(row) {
-    var found = contracts.find(d => d.id == row.id);
+    var found = storage.find(d => d.id == row.id);
     if (!found) {
-      contracts.push(row);
+      storage.push(row);
       bounceRender();
     }
   }
@@ -209,9 +209,9 @@ function setupTable(fields, validations, defaultRow={}) {
   }
 
   function dodelete(row) {
-    var foundIndex = contracts.findIndex(d => d.id == row.id);
+    var foundIndex = storage.findIndex(d => d.id == row.id);
     if (foundIndex > -1) {
-      contracts.splice(foundIndex, 1);
+      storage.splice(foundIndex, 1);
       bounceRender();
     }
   }
@@ -221,17 +221,17 @@ function setupTable(fields, validations, defaultRow={}) {
 
   setTimeout(() => {
     var tb, tr;
-    d3.select('table#contracts thead tr')
-      .selectAll('th').data(['Titulo', 'Estado', '-', 'Ir'])
+    d3.select(`table#${module} thead tr`)
+      .selectAll('th').data(header)
       .enter().append('th').text(d => d);
 
     // NEW-ENTRY
-    tb = d3.select('table#contracts')
-      .selectAll('tr.new-contract')
+    tb = d3.select(`table#${module}`)
+      .selectAll('tr.new-row')
       .data(newEntry);
 
-    tr = tb.enter().append('tr').classed('new-contract', true);
-    setupRedacts('Contracts', 'id', fields, tr, 'insert');
+    tr = tb.enter().append('tr').classed('new-row', true);
+    setupRedacts(module, 'id', fields, tr, 'insert');
   }, 0);
 
   function render() {
@@ -239,8 +239,8 @@ function setupTable(fields, validations, defaultRow={}) {
     var tr;
 
     // SELECT
-    tb = d3.select('table#contracts tbody')
-      .selectAll('tr.contract').data(contracts);
+    tb = d3.select(`table#${module} tbody`)
+      .selectAll('tr.row').data(storage);
 
     // EXIT
     tb.exit().remove();
@@ -254,8 +254,8 @@ function setupTable(fields, validations, defaultRow={}) {
       });
 
     // ENTER
-    tr = tb.enter().append('tr').classed('contract', true);
-    setupRedacts('Contracts', 'id', fields, tr);
+    tr = tb.enter().append('tr').classed('row', true);
+    setupRedacts(module, 'id', fields, tr);
     tr.append('td').append('button')
       .text('-')
       .classed('delete', true)
@@ -281,14 +281,14 @@ function setupTable(fields, validations, defaultRow={}) {
       });
 
     // MOVE NEW-ENTRY TO THE BOTTOM
-    tb = d3.select('table#contracts')
-      .selectAll('tr.new-contract')
+    tb = d3.select(`table#${module}`)
+      .selectAll('tr.new-row')
       .data(newEntry);
 
     tb.select('span')
       .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
 
-    d3.select('table#contracts tr.new-contract').each(function() {
+    d3.select(`table#${module} tr.new-row`).each(function() {
       this.parentElement.appendChild(this);
     });
   }

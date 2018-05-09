@@ -17,5 +17,8 @@
     }
   ];
 
-  window.contracts = setupTable(fields, validations, defaultRow);
+  const header = ['Titulo', 'Estado', '-', 'Ir'];
+
+  window.contracts = setupTable('Contracts', header,
+    fields, validations, defaultRow);
 })();
