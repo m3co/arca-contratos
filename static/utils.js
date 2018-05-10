@@ -154,25 +154,6 @@ function setupRedact(idkey, field, module, validations, query = 'update') {
   }
 }
 
-function setupDefault(defaultRow) {
-  var row = Object.assign({}, defaultRow);
-  row[Symbol.for('defaultrow')] = defaultRow;
-  return [row];
-}
-
-function updateTbody(tb, validations) {
-  // UPDATE
-  tb.select('span')
-    .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
-  tb.select('input[name="value"]')
-    .attr('value', (d, i, m) => d[m[i].getAttribute('key')])
-    .on('blur', defineBlurHandler);
-  tb.select('input[name="id"]')
-    .attr('value', (d, i, m) => d[m[i].getAttribute('idkey')]);
-  tb.select('form')
-    .on('submit', defineSubmitHandler.bind(null, validations));
-}
-
 function setupRedacts(module, idkey, fields, tr, query='update') {
   fields.forEach(field => {
     tr.append('td')
@@ -224,7 +205,11 @@ function setupTable(module, header, actions, fields, idkey, validations, default
   }
 
   fields[Symbol.for('validations')] = validations;
-  var newEntry = setupDefault(defaultRow);
+  var newEntry = (() => {
+    var row = Object.assign({}, defaultRow);
+    row[Symbol.for('defaultrow')] = defaultRow;
+    return [row];
+  })();
 
   setTimeout(() => {
     var tb, tr;
@@ -242,23 +227,31 @@ function setupTable(module, header, actions, fields, idkey, validations, default
   }, 0);
 
   function render() {
-    var tb;
-    var tr;
+    var trs, tr;
 
     // SELECT
-    tb = d3.select(`table#${module} tbody`)
+    trs = d3.select(`table#${module} tbody`)
       .selectAll('tr.row').data(storage);
 
     // EXIT
-    tb.exit().remove();
+    trs.exit().remove();
 
     // UPDATE
-    updateTbody(tb, validations);
+    trs.select('span')
+      .text((d, i, m) => renderText(d[m[i].getAttribute('key')]));
+    trs.select('input[name="value"]')
+      .attr('value', (d, i, m) => d[m[i].getAttribute('key')])
+      .on('blur', defineBlurHandler);
+    trs.select('input[name="id"]')
+      .attr('value', (d, i, m) => d[m[i].getAttribute('idkey')]);
+    trs.select('form')
+      .on('submit', defineSubmitHandler.bind(null, validations));
+
     actions.forEach(action =>
-      tb.select(action.select).call(action.setup));
+      trs.select(action.select).call(action.setup));
 
     // ENTER
-    tr = tb.enter().append('tr').classed('row', true);
+    tr = trs.enter().append('tr').classed('row', true);
     setupRedacts(module, idkey, fields, tr);
     actions.forEach(action =>
       tr.append('td').append('button').call(action.setup));
