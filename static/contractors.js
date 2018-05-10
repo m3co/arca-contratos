@@ -33,8 +33,10 @@
       .text('->')
       .classed('show', true)
       .on('click', d => {
-        var btn = d3.event.target;
-        console.log(btn, d);
+        client.emit('data', {
+          query: 'select',
+          module: 'Contracts'
+        });
       })
     )
   }];

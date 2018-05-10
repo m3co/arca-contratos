@@ -12,7 +12,7 @@ function defineBlurHandler(row, i, m) {
   row[key] = input.value;
 
   var span = input.closest('td').querySelector('span');
-  d3.select(span).text(d => renderText(input.value);
+  d3.select(span).text(d => renderText(input.value));
   form.hidden = true;
   span.hidden = false;
 }
@@ -219,7 +219,7 @@ function setupTable(module, header, actions, fields, idkey, validations, default
       .enter().append('th').text(d => d);
 
     // NEW-ENTRY
-    tb = d3.select(`table#${module}`)
+    tb = d3.select(`table#${module} tbody`)
       .selectAll('tr.new-row')
       .data(newEntry);
 
@@ -258,7 +258,7 @@ function setupTable(module, header, actions, fields, idkey, validations, default
       tr.append('td').append('button').call(action.setup));
 
     // MOVE NEW-ENTRY TO THE BOTTOM
-    d3.select(`table#${module} tr.new-row`).each(function() {
+    d3.select(`table#${module} tbody tr.new-row`).each(function() {
       this.parentElement.appendChild(this);
     });
   }

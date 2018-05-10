@@ -18,11 +18,6 @@
       query: 'select',
       module: 'Contractors'
     });
-
-    client.emit('data', {
-      query: 'select',
-      module: 'Contracts'
-    });
   });
 
   client.on('response', (data) => {
