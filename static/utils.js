@@ -1,4 +1,5 @@
 'use strict';
+(() => {
 const excludeFields = ['id', 'createdAt'];
 function renderText(t) {
   return t ? (t.toString().trim() ? t : '-') : '-';
@@ -269,3 +270,6 @@ function setupTable(module, header, actions, fields, idkey, validations, default
     doinsert: doinsert
   };
 }
+
+window.setupTable = setupTable;
+})();
