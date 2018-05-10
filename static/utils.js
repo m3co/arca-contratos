@@ -5,24 +5,24 @@ function renderText(t) {
   return t ? (t.toString().trim() ? t : '-') : '-';
 }
 
-function defineBlurHandler(row) {
-  var input = d3.event.target;
+function defineBlurHandler(row, i, m) {
+  var input = m[i];
   var form = input.closest('form');
   var key = input.getAttribute('key');
   row[key] = input.value;
 
   var span = input.closest('td').querySelector('span');
-  d3.select(span).text(d => renderText(d[key]));
+  d3.select(span).text(d => renderText(input.value);
   form.hidden = true;
   span.hidden = false;
 }
 
-function defineSubmitHandler(validations, row) {
+function defineSubmitHandler(validations, row, i, m) {
   var e = d3.event;
   e.preventDefault();
 
-  var form = e.target;
-  var span = form.parentElement.querySelector('span');
+  var form = m[i];
+  var span = form.closest('td').querySelector('span');
   form.hidden = true;
   span.hidden = false;
 

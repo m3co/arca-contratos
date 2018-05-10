@@ -10,7 +10,7 @@
   };
 
   const fields = [
-    'fullname', 'email'
+    'email', 'fullname'
   ];
 
   const header = ['Email', 'Nombre completo', '-', 'Ir'];
