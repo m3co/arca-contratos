@@ -33,9 +33,11 @@
       .text('->')
       .classed('show', true)
       .on('click', d => {
+        d3.select('table#Contracts').attr('hidden', null);
         client.emit('data', {
           query: 'select',
-          module: 'Contracts'
+          module: 'viewContractContractors',
+          ContractorId: d.id
         });
       })
     )
