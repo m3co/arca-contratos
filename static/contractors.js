@@ -34,6 +34,7 @@
       .classed('show', true)
       .on('click', d => {
         d3.select('table#Contracts').attr('hidden', null);
+        window.contracts.clear();
         client.emit('data', {
           query: 'select',
           module: 'viewContractContractors',

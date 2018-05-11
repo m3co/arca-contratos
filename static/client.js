@@ -6,7 +6,7 @@
 
     client.emit('data', {
       query: 'subscribe',
-      module: 'Contracts'
+      module: 'viewContractContractors'
     });
 
     client.emit('data', {
@@ -35,7 +35,7 @@
         } else {
           console.log('sin procesar Contractors', data);
         }
-      } else if (data.module == 'Contracts') {
+      } else if (data.module == 'viewContractContractors') {
         if (data.query == 'select') {
           contracts.doselect(data.row);
         } else if (data.query == 'update') {

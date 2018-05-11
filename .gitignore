@@ -3,3 +3,4 @@ package-lock.json
 config.ini
 /*.log
 .*.sw*
+/static/utils.js

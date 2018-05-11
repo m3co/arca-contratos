@@ -1,18 +1,18 @@
 'use strict';
 (() => {
   const defaultRow = {
-    status: 'negotiations',
-    title: ''
+    Contracts_status: 'negotiations',
+    Contracts_title: ''
   };
   const validations = {
-    status: { required: true },
-    title: { required: true }
+    Contracts_status: { required: true },
+    Contracts_title: { required: true }
   };
 
   const fields = [
-    'title',
+    'Contracts_title',
     {
-      name: 'status',
+      name: 'Contracts_status',
       list: 'contract-status'
     }
   ];
