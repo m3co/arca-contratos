@@ -26,7 +26,7 @@
       .on('click', d => {
         client.emit('data', {
           query: 'delete',
-          module: 'Contracts',
+          module: 'viewContractContractors',
           id: d.id,
           idkey: 'id'
         });
@@ -43,6 +43,6 @@
     )
   }];
 
-  window.contracts = setupTable('Contracts', header, actions,
+  window.contracts = setupTable('viewContractContractors', header, actions,
     fields, 'id', validations, defaultRow);
 })();

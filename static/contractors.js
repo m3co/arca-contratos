@@ -33,7 +33,7 @@
       .text('->')
       .classed('show', true)
       .on('click', d => {
-        d3.select('table#Contracts').attr('hidden', null);
+        d3.select('table#viewContractContractors').attr('hidden', null);
         window.contracts.clear();
         client.emit('data', {
           query: 'select',
