@@ -34,6 +34,7 @@
       .classed('show', true)
       .on('click', d => {
         d3.select('table#viewContractContractors').attr('hidden', null);
+        window.contracts.newEntry.ContractorId = d.id;
         window.contracts.clear();
         client.emit('data', {
           query: 'select',
