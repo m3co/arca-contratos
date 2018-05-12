@@ -20,6 +20,10 @@
       .text('-')
       .classed('delete', true)
       .on('click', d => {
+        /*
+        d3.select('table#viewContractContractors').attr('hidden', '');
+        d3.select('table#ContractRecords').attr('hidden', '');
+        */
         client.emit('data', {
           query: 'delete',
           module: 'Contractors',
