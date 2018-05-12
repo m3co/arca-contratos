@@ -34,6 +34,7 @@
       .classed('show', true)
       .on('click', d => {
         d3.select('table#viewContractContractors').attr('hidden', null);
+        d3.select('table#ContractRecords').attr('hidden', '');
         window.contracts.clear({
           ContractorId: d.id
         });

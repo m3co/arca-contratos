@@ -37,8 +37,15 @@
       .text('->')
       .classed('show', true)
       .on('click', d => {
-        var btn = d3.event.target;
-        console.log(btn, d);
+        d3.select('table#ContractRecords').attr('hidden', null);
+        window.records.clear({
+          ContractId: d.ContractId
+        });
+        client.emit('data', {
+          query: 'select',
+          module: 'ContractRecords',
+          ContractId: d.ContractId
+        });
       })
     )
   }];

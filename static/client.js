@@ -15,6 +15,11 @@
     });
 
     client.emit('data', {
+      query: 'subscribe',
+      module: 'ContractRecords'
+    });
+
+    client.emit('data', {
       query: 'select',
       module: 'Contractors'
     });
@@ -35,6 +40,18 @@
           contractors.doinsert(row);
         } else {
           console.log('sin procesar Contractors', data);
+        }
+      } else if (data.module == 'ContractRecords') {
+        if (query == 'select') {
+          records.doselect(row);
+        } else if (query == 'update') {
+          records.doupdate(row);
+        } else if (query == 'delete') {
+          records.dodelete(row);
+        } else if (query == 'insert') {
+          records.doinsert(row);
+        } else {
+          console.log('sin procesar ContractRecords', data);
         }
       } else if (data.module == 'viewContractContractors') {
         if (query == 'select') {
