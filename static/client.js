@@ -22,30 +22,31 @@
 
   client.on('response', (data) => {
     var query = data.query;
-    if (data.row) {
+    var row = data.row;
+    if (row) {
       if (data.module == 'Contractors') {
-        if (data.query == 'select') {
-          contractors.doselect(data.row);
-        } else if (data.query == 'update') {
-          contractors.doupdate(data.row);
-        } else if (data.query == 'delete') {
-          contractors.dodelete(data.row);
-        } else if (data.query == 'insert') {
-          contractors.doinsert(data.row);
+        if (query == 'select') {
+          contractors.doselect(row);
+        } else if (query == 'update') {
+          contractors.doupdate(row);
+        } else if (query == 'delete') {
+          contractors.dodelete(row);
+        } else if (query == 'insert') {
+          contractors.doinsert(row);
         } else {
           console.log('sin procesar Contractors', data);
         }
       } else if (data.module == 'viewContractContractors') {
-        if (data.query == 'select') {
-          contracts.doselect(data.row);
-        } else if (data.query == 'update') {
-          contracts.doupdate(data.row);
-        } else if (data.query == 'delete') {
-          contracts.dodelete(data.row);
-        } else if (data.query == 'insert') {
-          contracts.doinsert(data.row);
+        if (query == 'select') {
+          contracts.doselect(row);
+        } else if (query == 'update') {
+          contracts.doupdate(row);
+        } else if (query == 'delete') {
+          contracts.dodelete(row);
+        } else if (query == 'insert') {
+          contracts.doinsert(row);
         } else {
-          console.log('sin procesar Contracts', data);
+          console.log('sin procesar viewContractContractors', data);
         }
       } else {
         console.log('sin procesar', data);
