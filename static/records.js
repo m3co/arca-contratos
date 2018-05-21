@@ -35,6 +35,14 @@
     )
   }];
 
-  window.records = setupTable('ContractRecords', header, actions,
-    fields, 'id', validations, defaultRow);
+  window.records = setupTable({
+    filter: { key: 'table', value: 'ContractRecords' },
+    module: 'ContractRecords',
+    header: header,
+    actions: actions,
+    fields: fields,
+    idkey: 'id',
+    validations: validations,
+    defaultRow: defaultRow
+  });
 })();

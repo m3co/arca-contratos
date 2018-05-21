@@ -53,6 +53,14 @@
     )
   }];
 
-  window.contracts = setupTable('viewContractContractors', header, actions,
-    fields, 'id', validations, defaultRow);
+  window.contracts = setupTable({
+    module: 'viewContractContractors',
+    filter: { key: 'table', value: 'viewContractContractors' },
+    header: header,
+    actions: actions,
+    fields: fields,
+    idkey: 'id',
+    validations: validations,
+    defaultRow: defaultRow
+  });
 })();

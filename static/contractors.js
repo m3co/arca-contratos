@@ -51,6 +51,14 @@
     )
   }];
 
-  window.contractors = setupTable('Contractors', header, actions,
-    fields, 'id', validations, defaultRow);
+  window.contractors = setupTable({
+    filter: { value: 'Contractors', key: 'table' },
+    module: 'Contractors',
+    header: header,
+    actions: actions,
+    fields: fields,
+    idkey: 'id',
+    validations: validations,
+    defaultRow: defaultRow
+  });
 })();
