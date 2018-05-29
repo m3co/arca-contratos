@@ -31,6 +31,7 @@
       .text('->')
       .classed('show', true)
       .on('click', d => {
+        console.log('d', d);
       })
     )
   }];
