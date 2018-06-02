@@ -6,7 +6,7 @@
 
     client.emit('data', {
       query: 'select',
-      module: 'preAPUContractRecords'
+      module: 'viewAAUpreAPUContractors'
     });
 
     client.emit('data', {
@@ -20,7 +20,7 @@
     var row = data.row;
     var action;
     if (row) {
-      if (data.module == 'preAPUContractRecords') {
+      if (data.module == 'viewAAUpreAPUContractors') {
         action = preapucontractrecords[`do${query}`];
         if (action) { action(row); }
         else {

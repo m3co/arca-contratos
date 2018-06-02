@@ -1,39 +1,62 @@
 'use strict';
 (() => {
-  const defaultRow = {
-    ContractRecordId: 1
-  };
-  const validations = {
-  };
-
   const fields = [
-    'ContractRecordId', 'preAPUId', 'APUId'
+    'qop', 'cost', 'duration',
+    'description', 'unit', 'information',
+    'fullname', 'person',
   ];
 
-  const header = [
-    'Acta', 'Oferta', 'APU', ' '];
+  var lastSTO;
+  var aau = [];
+  function doselect(row) {
+    var found = aau.find(d => d.AAU_id == row.AAU_id);
+    if (found) {
+      found[Symbol.for('preAPU')].push(row);
+    } else {
+      var entry = {
+        AAU_id: row.AAU_id,
+        description: row.description,
+        information: row.information,
+        unit: row.unit,
+      };
+      entry[Symbol.for('preAPU')] = [row];
+      aau.push(entry);
+    }
+    if (lastSTO) {
+      clearTimeout(lastSTO);
+    }
+    lastSTO = setTimeout(() => render(), 300);
+  }
 
-  const actions = [{
-    select: 'button.delete',
-    setup: (selection => selection
-      .text('-')
-      .classed('delete', true)
-      .on('click', d => {
-        client.emit('data', {
-          query: 'delete',
-          module: 'preAPUContractRecords',
-          id: d.id,
-          idkey: 'id'
-        });
-      })
-  )}];
+  function render() {
+    var trs, tr, td;
+    trs = d3.select('#viewAAUpreAPUContractors tbody')
+      .selectAll('tr.aau_row').data(aau);
 
-  window.preapucontractrecords = setupTable({
-    module: 'preAPUContractRecords',
-    header: header, actions: actions,
-    fields: fields, idkey: 'id', validations: validations,
-    defaultRow: defaultRow,
-    filter: { key: 'table', value: 'preAPUContractRecords' }
-  });
+    tr = trs.enter().append('tr').classed('aau_row', true);
+    tr.append('td').append('table').selectAll('tr')
+      .data(d =>
+        ['AAU_id', 'description', 'unit', 'information']
+        .map(c => d[c]))
+      .enter().append('tr').append('td').text(d => d);
+
+    td = tr.append('td').append('table').append('tbody');
+    trs = td.selectAll('tr.preapu_row')
+      .data(d => d[Symbol.for('preAPU')]);
+    tr = trs.enter().append('tr')
+      .classed('preapu_row', true);
+
+    tr.append('td').append('input').attr('type', 'checkbox');
+
+    tr.selectAll('td')
+      .data(d =>
+        ['cost', 'duration', 'qop', 'fullname', 'person']
+        .map(c => d[c]))
+      .enter().append('td').text(d => d);
+  }
+
+  window.preapucontractrecords = {
+    doselect: doselect
+  };
 
 })();
