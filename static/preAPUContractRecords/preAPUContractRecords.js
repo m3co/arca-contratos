@@ -46,7 +46,33 @@
     tr = trs.enter().append('tr')
       .classed('preapu_row', true);
 
-    tr.append('td').append('input').attr('type', 'checkbox');
+    tr.append('td').append('input')
+      .attr('type', 'checkbox')
+      .attr('disabled', d => {
+        console.log(d);
+        return d.blocked ?
+          (d.ContractRecordId == 1 ? null : '') : null;
+      })
+      .attr('checked', d => d.preAPUContractRecordId ? '' : null)
+      .on('change', d => {
+        d.ContractRecordId ?
+          client.emit('data', {
+            module: 'viewAAUpreAPUContractors',
+            query: 'update',
+            id: d.id,
+            idkey: 'id',
+            key: ['ContractRecordId'],
+            value: [null]
+          }) :
+          client.emit('data', {
+            module: 'viewAAUpreAPUContractors',
+            query: 'update',
+            id: d.id,
+            idkey: 'id',
+            key: ['ContractRecordId'],
+            value: [1]
+          });
+      });
 
     tr.selectAll('td')
       .data(d =>
