@@ -11,7 +11,17 @@
 
     client.emit('data', {
       query: 'subscribe',
-      module: 'preAPUContractRecords'
+      module: 'viewAAUpreAPUContractors'
+    });
+
+    client.emit('data', {
+      query: 'select',
+      module: 'ContractRecords'
+    });
+
+    client.emit('data', {
+      query: 'subscribe',
+      module: 'ContractRecords'
     });
   });
 
@@ -25,6 +35,12 @@
         if (action) { action(row); }
         else {
           console.log('sin procesar APU', data);
+        }
+      } else if (data.module == 'ContractRecords') {
+        action = records[`do${query}`];
+        if (action) { action(row); }
+        else {
+          console.log('sin procesar Actas', data);
         }
       } else {
         console.log('sin procesar', data);

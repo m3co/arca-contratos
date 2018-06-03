@@ -48,11 +48,8 @@
 
     tr.append('td').append('input')
       .attr('type', 'checkbox')
-      .attr('disabled', d => {
-        console.log(d);
-        return d.blocked ?
-          (d.ContractRecordId == 1 ? null : '') : null;
-      })
+      .attr('disabled', d => d.blocked ?
+          (d.ContractRecordId == 1 ? null : '') : null)
       .attr('checked', d => d.preAPUContractRecordId ? '' : null)
       .on('change', d => {
         d.ContractRecordId ?
