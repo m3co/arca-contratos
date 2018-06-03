@@ -18,6 +18,7 @@
       .text('-')
       .classed('delete', true)
       .on('click', d => {
+        return; // please, don't delete anything by mistake
         client.emit('data', {
           query: 'delete',
           module: 'ContractRecords',
@@ -31,7 +32,12 @@
       .text('->')
       .classed('show', true)
       .on('click', d => {
-        console.log('d', d);
+        document.querySelector('#ContractRecordId').value = d.id;
+        window.preapucontractrecords.clear();
+        client.emit('data', {
+          query: 'select',
+          module: 'viewAAUpreAPUContractors'
+        });
       })
     )
   }];

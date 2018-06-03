@@ -49,9 +49,11 @@
     tr.append('td').append('input')
       .attr('type', 'checkbox')
       .attr('disabled', d => d.blocked ?
-          (d.ContractRecordId == 1 ? null : '') : null)
+          (d.ContractRecordId == document
+            .querySelector('#ContractRecordId').value ? null : '') : null)
       .attr('checked', d => d.preAPUContractRecordId ? '' : null)
       .on('change', d => {
+        document.querySelector('#ContractRecordId').value ? (
         d.ContractRecordId ?
           client.emit('data', {
             module: 'viewAAUpreAPUContractors',
@@ -67,8 +69,8 @@
             id: d.id,
             idkey: 'id',
             key: ['ContractRecordId'],
-            value: [1]
-          });
+            value: [document.querySelector('#ContractRecordId').value]
+          })) : undefined;
       });
 
     tr.selectAll('td')
@@ -81,7 +83,11 @@
   }
 
   window.preapucontractrecords = {
-    doselect: doselect
+    doselect: doselect,
+    clear: () => {
+      document.querySelector('#viewAAUpreAPUContractors tbody').innerHTML = '';
+      aau.length = 0;
+    }
   };
 
 })();

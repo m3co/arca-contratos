@@ -5,11 +5,6 @@
     console.log('connection');
 
     client.emit('data', {
-      query: 'select',
-      module: 'viewAAUpreAPUContractors'
-    });
-
-    client.emit('data', {
       query: 'subscribe',
       module: 'viewAAUpreAPUContractors'
     });
