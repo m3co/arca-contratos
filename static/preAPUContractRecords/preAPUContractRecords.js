@@ -9,12 +9,12 @@
   var lastSTO;
   var aau = [];
   function doselect(row) {
-    var found = aau.find(d => d.AAU_id == row.AAU_id);
+    var found = aau.find(d => d.AAUId == row.AAUId);
     if (found) {
       found[Symbol.for('preAPU')].push(row);
     } else {
       var entry = {
-        AAU_id: row.AAU_id,
+        AAUId: row.AAUId,
         description: row.description,
         information: row.information,
         unit: row.unit,
@@ -36,7 +36,7 @@
     tr = trs.enter().append('tr').classed('aau_row', true);
     tr.append('td').append('table').selectAll('tr')
       .data(d =>
-        ['AAU_id', 'description', 'unit', 'information']
+        ['AAUId', 'description', 'unit', 'information']
         .map(c => d[c]))
       .enter().append('tr').append('td').text(d => d);
 
