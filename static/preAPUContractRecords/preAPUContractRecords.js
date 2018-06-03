@@ -75,8 +75,10 @@
       });
 
     tr.selectAll('td')
-      .data(d =>
-        ['cost', 'duration', 'qop', 'fullname', 'person']
+      .data(d => [
+        'cost', 'duration', 'qop', 'fullname', 'person',
+        'ContractRecords_title',
+        'Contracts_title', 'Contracts_status']
         .map(c => d[c]))
       .enter().append('td').text(d => d);
   }
