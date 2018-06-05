@@ -43,7 +43,8 @@
     td = tr.append('td').append('table').append('tbody');
     trs = td.selectAll('tr.preapu_row')
       .data(d => d[Symbol.for('preAPU')]);
-    tr = trs.enter().append('tr')
+    tr = trs.enter().append('tr').classed('warning', d =>
+        d.ContractorId != document.querySelector('#ContractorId').value.toString())
       .classed('preapu_row', true);
 
     tr.append('td').append('input')
