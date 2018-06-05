@@ -33,6 +33,7 @@
       .classed('show', true)
       .on('click', d => {
         document.querySelector('#ContractRecordId').value = d.id;
+        document.querySelector('#ContractorId').value = d.ContractorId;
         window.preapucontractrecords.clear();
         client.emit('data', {
           query: 'select',
