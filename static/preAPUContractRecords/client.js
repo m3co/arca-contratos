@@ -11,15 +11,8 @@
 
     client.emit('data', {
       query: 'select',
-      module: 'ContractRecordsContractors'
+      module: 'viewContractRecordsContractors'
     });
-
-    /*
-    client.emit('data', {
-      query: 'subscribe',
-      module: 'ContractRecordsContractors'
-    });
-    */
   });
 
   client.on('response', (data) => {
@@ -33,7 +26,7 @@
         else {
           console.log('sin procesar APU', data);
         }
-      } else if (data.module == 'ContractRecordsContractors') {
+      } else if (data.module == 'viewContractRecordsContractors') {
         action = records[`do${query}`];
         if (action) { action(row); }
         else {

@@ -8,10 +8,10 @@
   };
 
   const fields = [
-    'title'
+    'ContractRecords_title', 'Contracts_title', 'Contractors_fullname'
   ];
 
-  const header = ['Titulo', '-', 'Ir'];
+  const header = ['Acta', 'Contrato', 'Contratista', '-', 'Ir'];
   const actions = [{
     select: 'button.delete',
     setup: (selection => selection
@@ -21,7 +21,7 @@
         return; // please, don't delete anything by mistake
         client.emit('data', {
           query: 'delete',
-          module: 'ContractRecords',
+          module: 'viewContractRecordsContractors',
           id: d.id,
           idkey: 'id'
         });
@@ -44,8 +44,8 @@
   }];
 
   window.records = setupTable({
-    filter: { key: 'table', value: 'ContractRecords' },
-    module: 'ContractRecords',
+    filter: { key: 'table', value: 'viewContractRecordsContractors' },
+    module: 'viewContractRecordsContractors',
     header: header,
     actions: actions,
     fields: fields,

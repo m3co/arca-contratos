@@ -31,24 +31,23 @@
   </head>
   <body style="width: 100%; height: 100%;">
     <div class="tooltip" style="opacity:0;"></div>
+    <label for="ContractRecordId">Acta Seleccionada</label>
+    <input id="ContractRecordId" placeholder="Acta Seleccionada..." disabled>
+    <label for="ContractorId">Contratista</label>
+    <input id="ContractorId" placeholder="Contratista" disabled>
     <div style="display: table; width:100%;">
-      <table id="ContractRecords" style="display: table-cell; width: 20%"
-        table="ContractRecords">
+      <table id="viewContractRecordsContractors" style="display: table-cell; width: 20%"
+        table="viewContractRecordsContractors">
         <caption>Actas de contratos</caption>
         <thead><tr></tr></thead>
         <tbody></tbody>
       </table>
       <script src="records.js"></script>
       <table id="viewAAUpreAPUContractors" style="display: table-cell; width: 70%;">
-        <caption>AAU contra las ofertas</caption>
         <thead><tr></tr></thead>
         <tbody></tbody>
       </table>
       <script src="preAPUContractRecords.js"></script>
     </div>
-    <label for="ContractRecordId">Acta Seleccionada</label>
-    <input id="ContractRecordId" placeholder="Acta Seleccionada..." disabled>
-    <label for="ContractorId">Contratista</label>
-    <input id="ContractorId" placeholder="Contratista" disabled>
   </body>
 </html>
