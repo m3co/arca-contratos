@@ -11,22 +11,8 @@
     'ContractRecords_title', 'Contracts_title', 'Contractors_fullname'
   ];
 
-  const header = ['Acta', 'Contrato', 'Contratista', '-', 'Ir'];
+  const header = ['Acta', 'Contrato', 'Contratista', '-'];
   const actions = [{
-    select: 'button.delete',
-    setup: (selection => selection
-      .text('-')
-      .classed('delete', true)
-      .on('click', d => {
-        return; // please, don't delete anything by mistake
-        client.emit('data', {
-          query: 'delete',
-          module: 'viewContractRecordsContractors',
-          id: d.id,
-          idkey: 'id'
-        });
-      })
-  )}, {
     select: 'button.show',
     setup: (selection => selection
       .text('->')
