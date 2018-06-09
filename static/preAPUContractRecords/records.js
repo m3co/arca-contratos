@@ -18,7 +18,7 @@
       .text('->')
       .classed('show', true)
       .on('click', d => {
-        document.querySelector('#ContractRecordId').value = d.id;
+        document.querySelector('#ContractRecordId').value = d.ContractRecordId;
         document.querySelector('#ContractorId').value = d.ContractorId;
         window.preapucontractrecords.clear();
         client.emit('data', {
