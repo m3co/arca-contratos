@@ -8,10 +8,10 @@
   };
 
   const fields = [
-    'title'
+    'title', 'end', 'signed'
   ];
 
-  const header = ['Titulo', '-', 'Ir'];
+  const header = ['Titulo', 'Finalizado', '', '-', 'Ir'];
   const actions = [{
     select: 'button.delete',
     setup: (selection => selection
