@@ -8,10 +8,10 @@
   };
 
   const fields = [
-    'ContractRecords_title', 'Contracts_title', 'Contractors_fullname'
+    'ContractRecords_title', 'Contracts_title', 'Contractors_fullname', 'ContractRecords_signed'
   ];
 
-  const header = ['Acta', 'Contrato', 'Contratista', '-'];
+  const header = ['Acta', 'Contrato', 'Contratista', '', '-'];
   const actions = [{
     select: 'button.show',
     setup: (selection => selection
@@ -24,6 +24,22 @@
         client.emit('data', {
           query: 'select',
           module: 'viewAAUpreAPUContractors'
+        });
+      })
+    )
+  }, {
+    select: 'button.sign',
+    setup: (selection => selection
+      .text('firmar')
+      .classed('sign', true)
+      .on('click', d => {
+        client.emit('data', {
+          query: 'update',
+          module: 'viewContractRecordsContractors',
+          idkey: 'id',
+          id: d.id,
+          value: [true],
+          key: ['ContractRecords_signed']
         });
       })
     )
