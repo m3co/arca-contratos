@@ -31,8 +31,8 @@
   )}];
 
   window.aputodo = setupTable({
-    filter: { value: 'APUTodo', key: 'table' },
-    module: 'APUTodo',
+    filter: { value: 'viewAPUTodo', key: 'table' },
+    module: 'viewAPUTodo',
     header: header,
     actions: actions,
     fields: fields,
