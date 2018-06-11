@@ -16,17 +16,17 @@
   const actions = [{
     select: 'button.asign_qop',
     setup: (selection => selection
-      .text('-')
+      .text('Asignar')
       .classed('asign_qop', true)
       .on('click', d => {
-        /*
         client.emit('data', {
           query: 'update',
-          module: 'APUTodo',
+          module: 'viewAPUTodo',
           id: d.id,
-          idkey: 'id'
+          idkey: 'id',
+          key: 'qop',
+          value: null
         });
-        */
       })
   )}];
 
